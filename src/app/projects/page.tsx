@@ -36,7 +36,7 @@ const projects: Project[] = [
 
 export default function ProjectsPage() {
   return (
-    <div className="max-h-fit bg-gray-100 dark:bg-gray-900 text-black dark:text-white py-12 px-6">
+    <div className="max-h-fit min-h-[90vh] bg-gray-100 dark:bg-gray-900 text-black dark:text-white py-12 px-6">
       <div className="max-w-7xl mx-auto">        
         {/* Title */}
         <h1 className="text-4xl font-bold text-center mb-8">My Projects</h1>
