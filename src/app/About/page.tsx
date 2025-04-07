@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function AboutMePage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-gray-100 dark:bg-gray-900 text-black dark:text-white">
@@ -8,9 +10,8 @@ export default function AboutMePage() {
         </h1>
 
         {/* Image & Text on the Right */}
-        <div className="flex flex-col items-center w-full md:w-2/3 text-center">
-          <img
-            src="Profile-photo.jpg"
+          <Image
+            src="/Profile-photo.jpg"
             alt="Profile Picture"
             className="w-48 h-48 rounded-full mb-4"
           />
@@ -20,7 +21,6 @@ export default function AboutMePage() {
           </p>
         </div>
       </div>
-    </div>
   );
 }
 
