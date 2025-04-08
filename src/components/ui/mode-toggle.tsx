@@ -3,6 +3,11 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import { CiSun } from "react-icons/ci";
+import { FaMoon } from "react-icons/fa";
+import { GrSystem } from "react-icons/gr";
+
+
 
 import { Button } from "./button";
 import {
@@ -36,13 +41,13 @@ export function ModeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          Light <CiSun />
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          Dark <FaMoon/>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          System <GrSystem/>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
