@@ -5,9 +5,6 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { motion } from "framer-motion";
-import { FaSun } from "react-icons/fa";
-import { Button } from "@/components/ui/button"
-
 
 
 // Navbar items
