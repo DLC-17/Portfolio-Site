@@ -9,7 +9,7 @@ export default function AboutMePage() {
         <div className="flex flex-col items-center md:items-start text-center md:text-left w-full md:w-1/2">
           <h1 className="text-4xl font-bold mb-4">About Me</h1>
           <p className="text-lg max-w-xl">
-            Hi, I'm David, a soon-to-be Saint Mary's College of California alumnus with a passion for software development and creating innovative solutions.
+            Hi, I&apos;m David, a soon-to-be Saint Mary&apos;s College of California alumnus with a passion for software development and creating innovative solutions.
           </p>
         </div>
 

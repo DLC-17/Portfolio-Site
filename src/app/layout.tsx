@@ -1,6 +1,6 @@
-import Header from "@/components/sections/footer/Header";
+import Header from "@/components/sections/Header/Header";
 import "../app/globals.css"; // Ensure global styles are applied
-import FooterSection from "@/components/ui/Footer/Footer";
+import FooterSection from "@/components/sections/Footer/Footer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 
 export const metadata = {
