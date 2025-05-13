@@ -1,5 +1,4 @@
 import "../app/globals.css"; // Ensure global styles are applied
-import FooterSection from "@/components/sections/Footer/Footer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar} from "@/components/app-sidebar";

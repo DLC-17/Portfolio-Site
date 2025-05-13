@@ -1,4 +1,4 @@
-import { Calendar, Camera, Contact, Home, Inbox, } from "lucide-react"
+import { Camera, Home, Inbox, } from "lucide-react"
 import { MdEmail } from "react-icons/md";
 import { ModeToggle } from "./ui/mode-toggle"
 import { FaLinkedin, } from "react-icons/fa";
