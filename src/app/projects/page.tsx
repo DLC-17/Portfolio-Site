@@ -10,6 +10,7 @@ const projects: Project[] = [
     id: 1,
     title: "Photography Portfolio",
     description: "A responsive Angular-based portfolio for a Bay Area photographer.",
+    Technologies: ["Angular", "TypeScript", "HTML", "CSS"],
     imageUrl: "",
     url:"https://github.com/DLC-17/RT-Portfolio",
   },
@@ -17,6 +18,7 @@ const projects: Project[] = [
     id: 2,
     title: "Real-Time Face Recognition",
     description: "A real-time face recognition project using Machine Learning.",
+    Technologies: ["Python", "OpenCV", "TensorFlow"],
     imageUrl: "",
     url:"https://github.com/DLC-17/Real-Time-Face-verification",
   },
@@ -24,14 +26,16 @@ const projects: Project[] = [
     id: 3,
     title: "Database Programming Final Project",
     description: "A fully comprehensive database project detailing the stastics various Baseball players.",
+    Technologies: ["SQL", "PostgreSQL", "Python","Tableau"],
     imageUrl: "",
     url:"https://github.com/DLC-17/Database-Final",
   },
   {id: 4,
     title: "Portfolio Website",
     description: "A personal portfolio website showcasing my projects and skills. Built with Next.js and Tailwind CSS.",
+    Technologies: ["Next.js", "Tailwind CSS", "React"],
     imageUrl: "",
-    url:""},
+    url:"portfolio-site-8vtfr316k-david-colemans-projects-415c0670.vercel.app"},
 ];
 
 export default function ProjectsPage() {
@@ -50,6 +54,8 @@ export default function ProjectsPage() {
             <div key={project.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 max-w-xs w-full">
               <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
               <p className="text-gray-700 dark:text-gray-300 mb-4">{project.description}</p>
+              <p className="text-gray-500 dark:text-gray-400 mb-4">
+                {project.Technologies.join(", ")}</p>
               {project.url && (
                 <Link href={project.url} target="_blank" className="text-blue-500 hover:underline">View Project</Link>
               )}

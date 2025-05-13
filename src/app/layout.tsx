@@ -1,7 +1,9 @@
-import Header from "@/components/sections/Header/Header";
 import "../app/globals.css"; // Ensure global styles are applied
 import FooterSection from "@/components/sections/Footer/Footer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar} from "@/components/app-sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export const metadata = {
   title: "My Portfolio",
@@ -12,18 +14,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en"  suppressHydrationWarning>
       <body>
-          <div className="flex flex-col min-h-screen">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-              <Header /> {/* Header is included on every page */}
-              <main className="flex-grow pt-15">{children}</main>
-              <FooterSection />
+      <SidebarProvider>
+      <AppSidebar />
+        <SidebarTrigger />
+              <main className="flex-grow">{children}</main>
+                            </SidebarProvider>
             </ThemeProvider>
-          </div>
       </body>
     </html>
   );

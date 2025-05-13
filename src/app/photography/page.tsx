@@ -8,13 +8,11 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 const photos = [
   { src: "/burningpots.JPG", alt: "Burning Pots", width: 800, height: 600 },
   { src: "/chapel.JPG", alt: "Chapel", width: 900, height: 1200 },
-  { src: "/clouds.JPG", alt: "Clouds", width: 1200, height: 800 },
   { src: "/dispo-ball.JPG", alt: "Disposable Ball", width: 1000, height: 1500 },
   { src: "/dispo-chapel.JPG", alt: "Disposable Chapel", width: 1200, height: 900 },
   { src: "/flame.JPG", alt: "Flame", width: 800, height: 1000 },
   { src: "/piano.JPG", alt: "Piano", width: 1000, height: 800 },
   { src: "/sea.JPG", alt: "Sea", width: 1200, height: 900 },
-  { src: "/sf-streets.JPG", alt: "San Francisco Streets", width: 1000, height: 1200 },
   { src: "/sk.JPG", alt: "Sky", width: 1200, height: 900 },
   { src: "/wallmural.JPG", alt: "Wall Mural", width: 1000, height: 800 },
   { src: "/boat.JPG", alt: "Boat", width: 1200, height: 900 },
@@ -41,6 +39,7 @@ export default function PhotoAlbum() {
   }, [selectedIndex]);
 
   return (
+    
     <div className="px-4 py-6">
       {/* Masonry Grid Layout */}
       <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
@@ -77,6 +76,7 @@ export default function PhotoAlbum() {
               exit={{ scale: 0.8 }}
               transition={{ type: "spring", stiffness: 100, damping: 15 }}
             >
+              
               <Image
                 src={photos[selectedIndex].src}
                 alt={photos[selectedIndex].alt}
