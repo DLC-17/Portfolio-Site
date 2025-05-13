@@ -1,9 +1,7 @@
 import { Camera, Home, Inbox, } from "lucide-react"
 import { MdEmail } from "react-icons/md";
 import { ModeToggle } from "./ui/mode-toggle"
-import { FaLinkedin, } from "react-icons/fa";
-
-
+import { FaGithub, FaLinkedin, } from "react-icons/fa";
 import {
   Sidebar,
   SidebarContent,
@@ -55,7 +53,7 @@ export function AppSidebar() {
              <div className="flex items-center">
   <ModeToggle />
   <a
-    href="https://linkedin.com/in/your-profile"
+    href="https://www.linkedin.com/in/david-coleman17/"
     target="_blank"
     rel="noopener noreferrer"
     className="inline-flex items-center justify-center rounded-md p-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -66,8 +64,10 @@ export function AppSidebar() {
     href="mailto:dlc17@stmarys-ca.edu"
     className="inline-flex items-center justify-center rounded-md p-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
   >
-    <MdEmail className="size-7" />
-  </a>
+    <MdEmail className="size-7" /> </a>
+  <a href="https://github.com/DLC-17" target="blank"
+  className="inline-flex items-center justify-center rounded-md p-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+  ><FaGithub className="size-5"/> </a>
 </div>
             </SidebarMenu>
           </SidebarGroupContent>
