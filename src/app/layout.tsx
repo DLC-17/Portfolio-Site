@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             enableSystem
             disableTransitionOnChange
           >
-      <SidebarProvider>
+      <SidebarProvider defaultOpen={false}>
       <AppSidebar />
         <SidebarTrigger />
               <main className="flex-grow">{children}</main>

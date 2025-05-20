@@ -6,15 +6,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 const photos = [
-  { src: "/burningpots.JPG", alt: "Burning Pots", width: 800, height: 600 },
-  { src: "/chapel.JPG", alt: "Chapel", width: 900, height: 1200 },
-  { src: "/dispo-ball.JPG", alt: "Disposable Ball", width: 1000, height: 1500 },
-  { src: "/dispo-chapel.JPG", alt: "Disposable Chapel", width: 1200, height: 900 },
+  { src: "/Boats.JPG", alt: "Boats", width: 800, height: 600 },
+  { src: "/DiversityDance.JPG", alt: "Diversity Dance", width: 900, height: 1200 },
+  { src: "/FG.JPG", alt: "Friendship Games", width: 1000, height: 1500 },
+  { src: "/FG2.JPG", alt: "Friendship Games", width: 1200, height: 900 },
   { src: "/flame.JPG", alt: "Flame", width: 800, height: 1000 },
   { src: "/piano.JPG", alt: "Piano", width: 1000, height: 800 },
   { src: "/sea.JPG", alt: "Sea", width: 1200, height: 900 },
   { src: "/sk.JPG", alt: "Sky", width: 1200, height: 900 },
-  { src: "/wallmural.JPG", alt: "Wall Mural", width: 1000, height: 800 },
+  { src: "/Richie.JPG", alt: "Richard Trinh", width: 1000, height: 800 },
   { src: "/boat.JPG", alt: "Boat", width: 1200, height: 900 },
 ];
 

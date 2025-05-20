@@ -51,10 +51,10 @@ export default function ProjectsPage() {
           transition={{ duration: 0.5 }}
         >
           {projects.map((project) => (
-            <div key={project.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 max-w-xs w-full">
+            <div key={project.id} className="bg-white dark:bg-gray-800 outline-1 outline-black dark:outline-white hover:bg-gray-300 dark:hover:bg-gray-700 p-6 rounded-lg shadow hover:shadow-lg transition">
               <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
               <p className="text-gray-700 dark:text-gray-300 mb-4">{project.description}</p>
-              <p className="text-gray-500 dark:text-gray-400 mb-4">
+              <p className="text-gray-500 dark:text-gray-400 mb-4">Tools Used:&nbsp; 
                 {project.Technologies.join(", ")}</p>
               {project.url && (
                 <Link href={project.url} target="_blank" className="text-blue-500 hover:underline">View Project</Link>
