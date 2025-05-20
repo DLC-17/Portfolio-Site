@@ -14,7 +14,7 @@ const photos = [
   { src: "/piano.JPG", alt: "Piano", width: 1000, height: 800 },
   { src: "/sea.JPG", alt: "Sea", width: 1200, height: 900 },
   { src: "/sk.JPG", alt: "Sky", width: 1200, height: 900 },
-  { src: "/Richie.JPG", alt: "Richard Trinh", width: 1000, height: 800 },
+  { src: "/richie.JPG", alt: "Richard Trinh", width: 1000, height: 800 },
   { src: "/boat.JPG", alt: "Boat", width: 1200, height: 900 },
 ];
 

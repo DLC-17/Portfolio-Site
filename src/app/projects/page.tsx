@@ -33,9 +33,9 @@ const projects: Project[] = [
   {id: 4,
     title: "Portfolio Website",
     description: "A personal portfolio website showcasing my projects and skills. Built with Next.js and Tailwind CSS.",
-    Technologies: ["Next.js", "Tailwind CSS", "React"],
+    Technologies: ["Next.js", "Tailwind CSS", "React", "TypeScript","Three.js"],
     imageUrl: "",
-    url:"portfolio-site-8vtfr316k-david-colemans-projects-415c0670.vercel.app"},
+    url:"https://github.com/DLC-17/Portfolio-Site"},
 ];
 
 export default function ProjectsPage() {
