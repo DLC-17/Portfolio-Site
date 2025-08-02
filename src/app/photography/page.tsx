@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import {
-  fetchPhotos,
-  urlFor,
-} from "../../../Sanity/sanity-utils";
+import { fetchPhotos, urlFor } from "../../../Sanity/sanity-utils";
 
 interface Photo {
   _id: string;
@@ -30,7 +27,9 @@ export default function PhotographyPage() {
   useEffect(() => {
     async function fetchData() {
       const allPhotos = await fetchPhotos();
-      const validPhotos = allPhotos.filter((photo: { _id: any; }) => photo && photo._id);
+      const validPhotos = allPhotos.filter(
+        (photo: { _id: string }) => photo && photo._id
+      );
       setPhotos(validPhotos);
     }
     fetchData();
@@ -117,7 +116,11 @@ export default function PhotographyPage() {
           >
             <img
               src={urlFor(photos[lightboxIndex].image).url()}
-              alt={photos[lightboxIndex].image.alt || photos[lightboxIndex].title || "Photo"}
+              alt={
+                photos[lightboxIndex].image.alt ||
+                photos[lightboxIndex].title ||
+                "Photo"
+              }
               className="max-w-full max-h-[80vh] rounded-lg"
               loading="lazy"
             />

@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { fetchProjects, urlFor } from '../../../Sanity/sanity-utils'
+import { Image } from 'sanity';
 
 type Project = {
   _id: string;
   title: string;
   description: string;
   technologies?: string[]; // optional, in case it's undefined
-  mainImage?: any;
+  mainImage?:  Image;
   demoUrl?: string;
   githubUrl?: string;
 };
