@@ -29,7 +29,9 @@ function Footer() {
           {navItems.map(({ name, link }) => {
             const isActive =
               pathname === link ||
-              (link.startsWith("#") && isClient && pathname + link === window.location.hash);
+              (link.startsWith("#") &&
+                isClient &&
+                pathname + link === window.location.hash);
             return (
               <Link
                 key={name}
@@ -65,7 +67,9 @@ function Footer() {
             {navItems.map(({ name, link }) => {
               const isActive =
                 pathname === link ||
-                (link.startsWith("#") && isClient && pathname + link === window.location.hash);
+                (link.startsWith("#") &&
+                  isClient &&
+                  pathname + link === window.location.hash);
               return (
                 <Link
                   key={name}

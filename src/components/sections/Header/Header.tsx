@@ -9,7 +9,6 @@ import { Menu, X } from "lucide-react";
 
 // Navbar items
 const navItems = [
-  { name: "About Me", link: "/About" },
   { name: "Projects", link: "/projects" },
   { name: "Photography", link: "/photography" },
 ];
@@ -24,7 +23,10 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="w-full fixed top-0 left-0 bg-white dark:bg-gray-900 shadow-md z-50">
+    <header
+      className="w-full fixed top-0 left-0 shadow-md z-50 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-70
+"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
         {/* DLC Logo */}
         <motion.div
@@ -37,14 +39,18 @@ export default function Header() {
         {/* Desktop Navigation - hidden on mobile */}
         <nav className="hidden md:flex max-w-xl space-x-4 lg:space-x-6">
           {navItems.map(({ name, link }) => {
-            const isActive = pathname === link || (link.startsWith("#") && isClient && pathname + link === window.location.hash);
+            const isActive =
+              pathname === link ||
+              (link.startsWith("#") &&
+                isClient &&
+                pathname + link === window.location.hash);
             return (
               <Link
                 key={name}
                 href={link}
-                className={`px-2 sm:px-3 py-1 sm:py-2 rounded-md text-sm font-medium ${
-                  isActive 
-                    ? "bg-blue-900 text-white" 
+                className={`px-2 sm:px-3 py-2 sm:py-2 rounded-md text-large font-medium ${
+                  isActive
+                    ? "bg-blue-900 text-white dark:bg-accent dark:text-white"
                     : "text-gray-700 hover:bg-gray-400 dark:text-gray-300 dark:hover:bg-gray-700"
                 }`}
               >
@@ -72,7 +78,11 @@ export default function Header() {
           <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-900 shadow-lg">
             <nav className="flex flex-col space-y-2 p-4">
               {navItems.map(({ name, link }) => {
-                const isActive = pathname === link || (link.startsWith("#") && isClient && pathname + link === window.location.hash);
+                const isActive =
+                  pathname === link ||
+                  (link.startsWith("#") &&
+                    isClient &&
+                    pathname + link === window.location.hash);
                 return (
                   <Link
                     key={name}
