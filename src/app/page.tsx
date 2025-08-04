@@ -91,7 +91,7 @@ const experience = [
 
 export default function Home() {
   return (
-    <main className="flex flex-col  justify-center items-center  px-6 text-center space-y-16">
+    <main className="flex flex-col w-full justify-center items-center  px-6 text-center space-y-16">
       {/* About Section */}
       <div className="pt-35 flex flex-col  md:flex-row md:space-x-8 px-4 py-10 max-w-6xl mx-auto">
         {/* About Section */}
