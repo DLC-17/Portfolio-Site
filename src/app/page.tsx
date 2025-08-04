@@ -196,7 +196,7 @@ export default function Home() {
         </div>
       </section>
       {/* Education Section */}
-      <section id="education" className="w-full pb-10 max-w-6xl px-4">
+      <section id="education" className="w-fit pb-10 max-w-6xl px-4">
         <h2 className="text-3xl font-bold text-black dark:text-white mb-6 text-center">
           Education
         </h2>
