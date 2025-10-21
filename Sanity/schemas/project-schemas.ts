@@ -1,3 +1,5 @@
+import { title } from "process";
+
 // schemas/project.ts
 export default {
   name: "project",
@@ -47,6 +49,11 @@ export default {
       name: "publishedAt",
       title: "Published At",
       type: "datetime",
+    },
+    {
+      name: "featured",
+      title: "Featured",
+      type: "boolean"
     },
   ],
 };

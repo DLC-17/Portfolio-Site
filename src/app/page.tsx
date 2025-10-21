@@ -1,6 +1,11 @@
 "use client";
+import { useEffect, useState } from 'react';
 import Image from "next/image";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+// Update the import path below to the correct relative path where sanity-utils.ts actually exists.
+// For example, if 'sanity-utils.ts' is in 'src/Sanity/sanity-utils.ts', use the following:
+import { fetchFeaturedProjects, urlFor } from '../../Sanity/sanity-utils'
+// If the file is in a different location, adjust the path accordingly.
 import {
   SiJavascript,
   SiTypescript,
@@ -14,8 +19,21 @@ import {
   SiTableau,
 } from "react-icons/si";
 import { IconType } from "react-icons";
+import Link from "next/link";
+import { motion } from 'framer-motion';
 
 
+
+
+type Project = {
+  _id: string;
+  title: string;
+  description: string;
+  technologies?: string[]; // optional, in case it's undefined
+  mainImage?: any; // Replace 'any' with a specific type/interface if available
+  demoUrl?: string;
+  githubUrl?: string;
+};
 const education = [
   {
     src: "/Logos/SMCpl.png",
@@ -56,14 +74,11 @@ const technologies: { name: string; icon: IconType }[] = [
 ];
 const experience = [
   {
-    title: "Research Assistant- UI/UX & Front-End Development",
-    company: "Saint Mary's College of California, School of Science",
+    title: "Software Engineer",
+    company: "Saint Mary's College of California",
     date: "Feb 2024 – Aug 2024",
     description: [
-      "Contributed to Dub Dragon, a browser-based music composition tool using finite state machines to generate dynamic MIDI outputs.",
-      "Led development of the site prototype, focusing on runtime efficiency and intuitive user interaction",
-      "Designed and built a clear, accessible front-end interface for diagram-based user input and real-time MIDI generation",
-      "Optimized application performance through attention to visual clarity, responsiveness, and lightweight front-end architecture"
+      "Led development of the site prototype,Dub Dragon, a browser-based music composition tool using finite state machines to generate dynamic MIDI outputs "
     ],
   },
   {
@@ -71,8 +86,6 @@ const experience = [
     company: "Saint Mary's College of California",
     date: "September 2022 – May 2025",
     description: [
-      "Scoped and deployed security authentication workflows affecting 2000+ users",
-      "Translated technical solutions into clear, actionable steps for end users",
       "Liaised with faculty and IT leadership to deploy new hardware and resolve recurring issues",
       "Trained new interns and optimized ticket tracking via TDNext",
     ],
@@ -83,15 +96,32 @@ const experience = [
     date: "May 2023 – Dec 2023",
     description: [
       "Conducted applied research in a team on LLMs’ ability to interpret technical regulatory language using FCC datasets",
-      "Compared open- vs closed-source models for comprehension benchmarks; summarized findings for non-technical audiences",
-      "Contributed to academic report used by faculty and external collaborators presented in the HCI international 2024"
+      "Compared open- vs closed-source models for comprehension benchmarks; summarized findings for HCI international 2024"
     ],
   },
 ];
 
 export default function Home() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    const getProjects = async () => {
+      try {
+        const data = await fetchFeaturedProjects();
+        setProjects(data);
+      } catch (err) {
+        setError('Failed to fetch projects.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getProjects();
+  }, []);
   return (
     <main className="flex flex-col w-full justify-center items-center  px-6 text-center space-y-16">
+      
       {/* About Section */}
       <div className="pt-35 flex flex-col  md:flex-row md:space-x-8 px-4 py-10 max-w-6xl mx-auto">
         {/* About Section */}
@@ -143,8 +173,7 @@ export default function Home() {
           </a>
         </div>
       </section>
-        </section>
-
+      </section>
         {/* Technologies Section */}
         <section id="technologies" className="w-full text-right  md:w-1/2">
           <h2 className="text-3xl text-center  font-bold text-black dark:text-white mb-6 ">
@@ -165,6 +194,53 @@ export default function Home() {
           </div>
         </section>
       </div>
+      <section id="featured projects" className='w-80% justify-center items-center'>
+        <h2 className="text-3xl font-bold text-black dark:text-white mb-6">Featured Projects</h2>
+        <motion.div
+            layoutId="modal"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {projects.map((project) => (
+              <div
+                key={project._id}
+                className="  outline-1 outline-black hover:-translate-y-2 dark:outline-white hover:bg-gray-300 dark:hover:bg-accent p-6 rounded-lg shadow hover:shadow-lg transition w-full max-w-md"
+              >
+                {project.mainImage && (
+                  <img
+                    src={urlFor(project.mainImage).width(800).url()}
+                    alt={project.title}
+                    className="rounded mb-4 object-cover h-48 w-full"
+                  />
+                )}
+                <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">{project.description}</p>
+
+                {project.technologies && (
+                  <p className="text-gray-500 font-bold dark:text-white mb-4">
+                    Tools Used: {project.technologies.join(', ') }
+                  </p>
+                )}
+
+                <div className="flex gap-4">
+                  {project.githubUrl && (
+                    <Link href={project.githubUrl} target="_blank" className="text-blue-500 hover:underline">
+                      GitHub
+                    </Link>
+                  )}
+                  {project.demoUrl && (
+                    <Link href={project.demoUrl} target="_blank" className="text-blue-500 hover:underline">
+                      Live Demo
+                    </Link>
+                  )}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+      </section>
+
       {/* Experience Section */}
       <section id="experience" className="w-full max-w-6xl">
         <h2 className="text-3xl font-bold text-black dark:text-white mb-6">
@@ -174,7 +250,7 @@ export default function Home() {
           {experience.map((job, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-accent outline-1 outline-black dark:outline-white p-6 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600 transform transition-transform duration-300 hover:-translate-y-2"
+              className="  outline-1 outline-black dark:outline-white p-6 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-300 dark:hover:bg-accent transform transition-transform duration-300 hover:-translate-y-2"
             >
               <h3 className="text-xl font-semibold text-black dark:text-white">
                 {job.title}
@@ -234,7 +310,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-
+      
       
     </main>
   );

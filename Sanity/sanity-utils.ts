@@ -30,6 +30,24 @@ export const fetchProjects = async () => {
     }`
   )
 }
+//fetch projects labeled as featured
+export const fetchFeaturedProjects = async () => {
+  return await sanityClient.fetch(
+    groq`*[_type == "project" && featured == true] | order(publishedAt desc){
+      _id,
+      title,
+      slug,
+      description,
+      technologies,
+      demoUrl,
+      githubUrl,
+      mainImage,
+      publishedAt,
+      featured
+    }`
+  )
+}
+
 
 // ✅ Fetch Blog Posts
 export const fetchPosts = async () => {
