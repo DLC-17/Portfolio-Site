@@ -194,52 +194,7 @@ export default function Home() {
           </div>
         </section>
       </div>
-      <section id="featured projects" className='w-80% justify-center items-center'>
-        <h2 className="text-3xl font-bold text-black dark:text-white mb-6">Featured Projects</h2>
-        <motion.div
-            layoutId="modal"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {projects.map((project) => (
-              <div
-                key={project._id}
-                className="  outline-1 outline-black hover:-translate-y-2 dark:outline-white hover:bg-gray-300 dark:hover:bg-accent p-6 rounded-lg shadow hover:shadow-lg transition w-full max-w-md"
-              >
-                {project.mainImage && (
-                  <img
-                    src={urlFor(project.mainImage).width(800).url()}
-                    alt={project.title}
-                    className="rounded mb-4 object-cover h-48 w-full"
-                  />
-                )}
-                <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">{project.description}</p>
-
-                {project.technologies && (
-                  <p className="text-gray-500 font-bold dark:text-white mb-4">
-                    Tools Used: {project.technologies.join(', ') }
-                  </p>
-                )}
-
-                <div className="flex gap-4">
-                  {project.githubUrl && (
-                    <Link href={project.githubUrl} target="_blank" className="text-blue-500 hover:underline">
-                      GitHub
-                    </Link>
-                  )}
-                  {project.demoUrl && (
-                    <Link href={project.demoUrl} target="_blank" className="text-blue-500 hover:underline">
-                      Live Demo
-                    </Link>
-                  )}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-      </section>
+      
 
       {/* Experience Section */}
       <section id="experience" className="w-full max-w-6xl">
