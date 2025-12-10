@@ -78,7 +78,8 @@ const experience = [
     company: "Saint Mary's College of California",
     date: "Feb 2024 – Aug 2024",
     description: [
-      "Led development of the site prototype,Dub Dragon, a browser-based music composition tool using finite state machines to generate dynamic MIDI outputs "
+      "Led development of  a browser-based music composition tool using finite state machines to generate dynamic MIDI outputs ",
+      "Collaborated with a team of 4 to design UI/UX and implement core features using Javascript, GO, Html5, and CSS3",
     ],
   },
   {
@@ -87,6 +88,7 @@ const experience = [
     date: "September 2022 – May 2025",
     description: [
       "Liaised with faculty and IT leadership to deploy new hardware and resolve recurring issues",
+      "Scoped and deployed security authentication workflows affecting 2000+ users",
       "Trained new interns and optimized ticket tracking via TDNext",
     ],
   },
@@ -96,7 +98,7 @@ const experience = [
     date: "May 2023 – Dec 2023",
     description: [
       "Conducted applied research in a team on LLMs’ ability to interpret technical regulatory language using FCC datasets",
-      "Compared open- vs closed-source models for comprehension benchmarks; summarized findings for HCI international 2024"
+      "Compared open- vs closed-source models for comprehension benchmarks; summarized findings for HCI international 2024",
     ],
   },
 ];

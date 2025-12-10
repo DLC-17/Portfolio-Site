@@ -4,7 +4,7 @@ import Header from "@/components/sections/Header/Header";
 //import MyThree from "@/components/ui/Three";
 
 export const metadata = {
-  title: "My Portfolio",
+  title: "David Coleman - Portfolio",
   description: "A showcase of my technical projects and photography",
 };
 
