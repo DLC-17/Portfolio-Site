@@ -1,5 +1,3 @@
-import { title } from "process";
-
 // schemas/project.ts
 export default {
   name: "project",

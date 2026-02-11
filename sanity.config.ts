@@ -12,7 +12,7 @@ const config = defineConfig({
 
   title: "website",
 
-  apiVersion: "2025-07-25",
+  apiVersion: "2023-07-26",
 
   basePath: "/admin-studio",
 

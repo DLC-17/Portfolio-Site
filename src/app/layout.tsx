@@ -1,8 +1,6 @@
 import "../app/globals.css"; // Ensure global styles are applied
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Header from "@/components/sections/Header/Header";
-//import MyThree from "@/components/ui/Three";
-
 export const metadata = {
   title: "David Coleman - Portfolio",
   description: "A showcase of my technical projects and photography",
@@ -22,7 +20,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/*<div className="-z-100 fixed opacity-65"><MyThree /></div>*/}
           <Header />
           <main className="flex-grow">{children}</main>
         </ThemeProvider>

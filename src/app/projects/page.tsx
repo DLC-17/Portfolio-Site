@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { fetchProjects, urlFor } from '../../../Sanity/sanity-utils'
+import { fetchProjects, urlFor } from "@/sanity/sanity-utils";
 import { Image } from 'sanity';
 
 type Project = {

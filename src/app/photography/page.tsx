@@ -1,21 +1,23 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { fetchPhotos, urlFor } from "../../../Sanity/sanity-utils";
+import { fetchPhotos, urlFor } from "@/sanity/sanity-utils";
 
 interface Photo {
   _id: string;
   title?: string;
+  slug?: { current?: string };
   image: {
-    asset: {
-      _ref?: string;
+    asset?: {
       _id?: string;
+      url?: string;
     };
     alt?: string;
   };
   caption?: string;
   location?: string;
   takenAt?: string;
+  tags?: string[];
 }
 
 export default function PhotographyPage() {

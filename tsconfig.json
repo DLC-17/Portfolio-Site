@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@/sanity/*": [
+        "./Sanity/*"
       ]
     }
   },
@@ -33,7 +36,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/ui/Three.tsx",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
