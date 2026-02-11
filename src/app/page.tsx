@@ -365,7 +365,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Form */}
+      {/* Contact Form 
       <section id="contact-form" className="w-full max-w-xl mx-auto px-4 pb-16">
         <h2 className="text-3xl font-bold text-black dark:text-white mb-6 text-center">
           Get in Touch
@@ -440,6 +440,7 @@ export default function Home() {
           </Button>
         </form>
       </section>
+      */}
     </main>
   );
 }
