@@ -6,7 +6,12 @@ const VALID_PROJECT_TYPES = ["Contract", "Full-time", "Part-time"] as const;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, projectType, message } = body;
+    const { name, projectType, message, website } = body;
+
+    // Honeypot: reject if bot-filled field has a value
+    if (website && typeof website === "string" && website.trim()) {
+      return NextResponse.json({ success: true }, { status: 200 });
+    }
 
     if (!name || typeof name !== "string" || !name.trim()) {
       return NextResponse.json(

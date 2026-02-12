@@ -7,10 +7,14 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
-// Navbar items
+// Navbar items - use /#anchor for homepage sections so links work from any page
 const navItems = [
+  { name: "About", link: "/#about" },
+  { name: "Experience", link: "/#experience" },
+  { name: "Education", link: "/#education" },
   { name: "Projects", link: "/projects" },
   { name: "Photography", link: "/photography" },
+  { name: "Contact", link: "/#contact" },
 ];
 
 export default function Header() {

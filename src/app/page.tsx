@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import {
@@ -23,6 +23,9 @@ import { Code2, Layout, Server, Cpu } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { fetchFeaturedProjects, urlFor } from "@/sanity/sanity-utils";
+import type { Image } from "sanity";
 
 const education = [
   {
@@ -128,14 +131,41 @@ const experience: { title: string; company: string; date: string; location?: str
 
 const PROJECT_TYPES = ["Contract", "Full-time", "Part-time"] as const;
 
+type FeaturedProject = {
+  _id: string;
+  title: string;
+  description: string;
+  technologies?: string[];
+  mainImage?: Image;
+  demoUrl?: string;
+  githubUrl?: string;
+};
+
 export default function Home() {
   const [selectedExpertiseIndex, setSelectedExpertiseIndex] = useState<number | null>(0);
   const selectedCategory = selectedExpertiseIndex !== null ? expertiseCategories[selectedExpertiseIndex] : null;
   const [contactName, setContactName] = useState("");
   const [projectType, setProjectType] = useState("");
   const [contactMessage, setContactMessage] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [contactStatus, setContactStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [contactError, setContactError] = useState("");
+  const [featuredProjects, setFeaturedProjects] = useState<FeaturedProject[]>([]);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await fetchFeaturedProjects();
+        setFeaturedProjects(data);
+      } catch {
+        setFeaturedProjects([]);
+      } finally {
+        setProjectsLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,6 +179,7 @@ export default function Home() {
           name: contactName,
           projectType,
           message: contactMessage,
+          website: honeypot,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -181,6 +212,9 @@ export default function Home() {
           <h2 className="text-2xl text-center font-semibold text-gray-700 dark:text-gray-300 mt-2">
             Forward Deployed Engineer
           </h2>
+          <p className="mt-2 text-lg text-center text-gray-600 dark:text-gray-400">
+            Building production AI systems—from voice agents to MCP tooling
+          </p>
 
           <p className="mt-4 text-lg text-center text-gray-600 dark:text-gray-300">
             Take a second and check out my portfolio showcasing my work in
@@ -232,7 +266,7 @@ export default function Home() {
                   key={cat.group}
                   type="button"
                   onClick={() => setSelectedExpertiseIndex(isSelected ? null : index)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all outline-1 outline-black dark:outline-white shadow-md hover:shadow-lg ${
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 outline-1 outline-black dark:outline-white shadow-md hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] ${
                     isSelected
                       ? "bg-gray-300 dark:bg-gray-700"
                       : "bg-gray-100 dark:bg-accent hover:bg-gray-300 dark:hover:bg-gray-700"
@@ -258,7 +292,7 @@ export default function Home() {
                 return (
                   <div
                     key={name}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg shadow-md hover:shadow-lg bg-gray-100 dark:bg-accent hover:bg-gray-300 dark:hover:bg-gray-700 outline-1 outline-black dark:outline-white transition-all"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg shadow-md bg-gray-100 dark:bg-accent outline-1 outline-black dark:outline-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700"
                   >
                     {Icon ? (
                       <Icon size={20} className="text-black dark:text-white shrink-0" />
@@ -272,6 +306,74 @@ export default function Home() {
             </div>
           ) : null}
         </section>
+
+        {/* Featured Projects */}
+        {featuredProjects.length > 0 && (
+          <section id="featured-projects" className="w-full mt-12">
+            <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
+              Featured Projects
+            </h2>
+            {projectsLoading ? (
+              <p className="text-gray-600 dark:text-gray-400">Loading projects…</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                {featuredProjects.map((project) => (
+                  <div
+                    key={project._id}
+                    className="w-full max-w-md outline-1 outline-black dark:outline-white p-6 rounded-lg shadow-md bg-gray-100 dark:bg-accent transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700"
+                  >
+                    {project.mainImage && (
+                      <img
+                        src={urlFor(project.mainImage).width(800).url()}
+                        alt={project.title}
+                        className="rounded mb-4 object-cover h-40 w-full"
+                      />
+                    )}
+                    <h3 className="text-lg font-semibold text-black dark:text-white mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-gray-700 dark:text-gray-300 text-sm mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+                    {project.technologies && (
+                      <p className="text-gray-500 dark:text-gray-400 text-xs mb-4">
+                        {project.technologies.join(", ")}
+                      </p>
+                    )}
+                    <div className="flex gap-3">
+                      {project.githubUrl && (
+                        <Link
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                        >
+                          GitHub
+                        </Link>
+                      )}
+                      {project.demoUrl && (
+                        <Link
+                          href={project.demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+                        >
+                          Live Demo
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <Link
+              href="/projects"
+              className="inline-block mt-4 text-blue-600 dark:text-blue-400 hover:underline font-medium"
+            >
+              View all projects →
+            </Link>
+          </section>
+        )}
       </div>
 
       {/* Experience Section - Vertical alternating timeline */}
@@ -291,7 +393,7 @@ export default function Home() {
               </div>
             );
             const card = (
-              <div className="outline-1 outline-black dark:outline-white p-6 rounded-lg shadow-md hover:shadow-lg bg-gray-100 dark:bg-accent hover:bg-gray-300 dark:hover:bg-gray-700 transition-all text-center">
+              <div className="outline-1 outline-black dark:outline-white p-6 rounded-lg shadow-md bg-gray-100 dark:bg-accent transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700 text-center">
                 <h3 className="text-xl font-semibold text-black dark:text-white">
                   {job.title}
                 </h3>
@@ -365,7 +467,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Form 
+      {/* Contact Form */}
       <section id="contact-form" className="w-full max-w-xl mx-auto px-4 pb-16">
         <h2 className="text-3xl font-bold text-black dark:text-white mb-6 text-center">
           Get in Touch
@@ -374,6 +476,18 @@ export default function Home() {
           onSubmit={handleContactSubmit}
           className="flex flex-col gap-4 outline-1 outline-black dark:outline-white p-6 rounded-lg bg-gray-100 dark:bg-accent"
         >
+          {/* Honeypot - hidden from users, bots will fill it */}
+          <div className="absolute -left-[9999px] opacity-0" aria-hidden="true">
+            <label htmlFor="contact-website">Website</label>
+            <input
+              id="contact-website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+            />
+          </div>
           <div>
             <label htmlFor="contact-name" className="block text-sm font-medium text-black dark:text-white mb-1">
               Name
@@ -440,7 +554,6 @@ export default function Home() {
           </Button>
         </form>
       </section>
-      */}
     </main>
   );
 }

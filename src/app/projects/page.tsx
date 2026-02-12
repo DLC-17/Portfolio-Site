@@ -57,7 +57,7 @@ export default function ProjectsPage() {
             {projects.map((project) => (
               <div
                 key={project._id}
-                className="  outline-1 outline-black hover:-translate-y-2 dark:outline-white hover:bg-gray-300 dark:hover:bg-accent p-6 rounded-lg shadow hover:shadow-lg transition w-full max-w-md"
+                className="outline-1 outline-black dark:outline-white p-6 rounded-lg shadow bg-gray-100 dark:bg-accent transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700 w-full max-w-md"
               >
                 {project.mainImage && (
                   <img
