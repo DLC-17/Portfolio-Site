@@ -90,6 +90,7 @@ const experience: { title: string; company: string; date: string; location?: str
     title: "Forward Deployed Engineer",
     company: "Spoqen",
     date: "Sep 2025 – Present",
+    location: "Remote",
     description: [
       "Developed FastAPI endpoints to integrate voice agents with Playwright, utilizing WebSockets and asynchronous Python (Asyncio) to handle live web task execution",
       "Optimized Playwright-based automation systems achieving 99.9% uptime, processing 400+ voice interactions monthly",
