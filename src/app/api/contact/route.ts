@@ -35,9 +35,8 @@ export async function POST(request: Request) {
     const apiKey = process.env.RESEND_API_KEY;
     // Use RESEND_TEST_RECIPIENT for testing (Resend allows only your account email when using onboarding domain). Otherwise CONTACT_EMAIL (main page email).
     const toEmail =
-      process.env.RESEND_TEST_RECIPIENT ||
       process.env.CONTACT_EMAIL ||
-      "dlc17@stmarys-ca.edu";
+      "dc@dc-dev.space";
 
     if (!apiKey) {
       console.error("RESEND_API_KEY is not set");
@@ -49,7 +48,7 @@ export async function POST(request: Request) {
 
     const resend = new Resend(apiKey);
     const { data, error } = await resend.emails.send({
-      from: "Portfolio Contact <onboarding@resend.dev>",
+      from: "Portfolio Contact <contacat@dc-dev.space>",
       to: [toEmail],
       subject: `Portfolio contact from ${name.trim()}`,
       html: `
