@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { fetchFeaturedProjects, urlFor } from "@/sanity/sanity-utils";
-import type { Image } from "sanity";
+import type { Image as SanityImage } from "sanity";
 
 const education = [
   {
@@ -136,7 +136,7 @@ type FeaturedProject = {
   title: string;
   description: string;
   technologies?: string[];
-  mainImage?: Image;
+  mainImage?: SanityImage;
   demoUrl?: string;
   githubUrl?: string;
 };
