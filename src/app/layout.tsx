@@ -3,7 +3,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import Header from "@/components/sections/Header/Header";
 export const metadata = {
   title: "David Coleman - Portfolio",
-  description: "A showcase of my technical projects and photography",
+  description: "A showcase of my technical projects",
 };
 
 export default function RootLayout({

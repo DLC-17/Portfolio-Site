@@ -220,7 +220,7 @@ export default function Home() {
 
           <p className="mt-4 text-lg text-center text-gray-600 dark:text-gray-300">
             Take a second and check out my portfolio showcasing my work in
-            software development and photography.
+            software development.
           </p>
           {/* Contact Section */}
           <section id="contact" className="w-full max-w-6xl text-center pb-6">
@@ -378,31 +378,31 @@ export default function Home() {
         )}
       </div>
 
-      {/* Experience Section - Vertical alternating timeline */}
+      {/* Experience Section - Vertical timeline; stacked on mobile, alternating on desktop */}
       <section id="experience" className="w-full max-w-4xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-black dark:text-white mb-10">
+        <h2 className="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-6 sm:mb-10">
           Experience
         </h2>
         <div className="relative">
-          {/* Central vertical line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 bg-gray-300 dark:bg-gray-600 z-0" />
+          {/* Vertical line: left on mobile, center on desktop */}
+          <div className="absolute left-2 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600 z-0 md:left-1/2 md:-translate-x-1/2" />
           {experience.map((job, index) => {
             const isLeft = index % 2 === 0;
             const dateBlock = (
-              <div className="flex flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400 text-sm whitespace-nowrap">
+              <div className="flex flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400 text-xs sm:text-sm whitespace-nowrap">
                 <span>{job.date}</span>
                 {job.location ? <span>{job.location}</span> : null}
               </div>
             );
             const card = (
-              <div className="outline-1 outline-black dark:outline-white p-6 rounded-lg shadow-md bg-gray-100 dark:bg-accent transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700 text-center">
-                <h3 className="text-xl font-semibold text-black dark:text-white">
+              <div className="outline-1 outline-black dark:outline-white p-4 sm:p-6 rounded-lg shadow-md bg-gray-100 dark:bg-accent transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700 text-center w-full min-w-0">
+                <h3 className="text-lg sm:text-xl font-semibold text-black dark:text-white">
                   {job.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">{job.company}</p>
-                <ul className="list-disc list-inside mt-2 space-y-1 text-center mx-auto">
+                <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">{job.company}</p>
+                <ul className="list-disc list-inside mt-2 space-y-1 text-center mx-auto text-xs sm:text-sm max-w-xl">
                   {job.description.map((desc, i) => (
-                    <li key={i} className="text-gray-600 dark:text-gray-300 text-sm">
+                    <li key={i} className="text-gray-600 dark:text-gray-300 text-left">
                       {desc}
                     </li>
                   ))}
@@ -410,15 +410,22 @@ export default function Home() {
               </div>
             );
             return (
-              <div key={index} className="relative flex w-full mb-8 z-10">
-                {/* Left half: card or date */}
-                <div className="w-1/2 pr-4 flex justify-end items-start">
+              <div
+                key={index}
+                className="relative flex flex-col md:flex-row w-full mb-6 sm:mb-8 z-10 pl-8 md:pl-0"
+              >
+                {/* Mobile: timeline dot on left */}
+                <div className="absolute left-0 top-5 w-3 h-3 rounded-full bg-accent-foreground border-4 border-gray-100 dark:border-gray-900 shrink-0 z-20 md:left-1/2 md:-translate-x-1/2 md:top-6 md:w-4 md:h-4" />
+                {/* Mobile: date then card, full width */}
+                <div className="md:hidden mb-2">
+                  {dateBlock}
+                </div>
+                <div className="md:hidden w-full">{card}</div>
+                {/* Desktop: alternating left/right */}
+                <div className="hidden md:flex w-1/2 pr-4 justify-end items-start">
                   {isLeft ? card : dateBlock}
                 </div>
-                {/* Timeline dot */}
-                <div className="absolute left-1/2 top-6 -translate-x-1/2 w-4 h-4 rounded-full bg-accent-foreground border-4 border-gray-100 dark:border-gray-900 shrink-0 z-20" />
-                {/* Right half: date or card */}
-                <div className="w-1/2 pl-4 flex justify-start items-start">
+                <div className="hidden md:flex w-1/2 pl-4 justify-start items-start">
                   {isLeft ? dateBlock : card}
                 </div>
               </div>
@@ -427,29 +434,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Education Section */}
-      <section id="education" className="w-fit pb-10 max-w-6xl px-4">
-        <h2 className="text-3xl font-bold text-black dark:text-white mb-6 text-center">
+      {/* Education Section - stacked on mobile, horizontal on desktop */}
+      <section id="education" className="w-full max-w-6xl mx-auto pb-10 px-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-6 text-center">
           Education
         </h2>
 
-        <div className="relative flex items-start justify-between pt-8">
-          <div className="absolute top-0 left-0 w-full h-0.5 bg-gray-300 dark:bg-gray-600 z-0" />
+        <div className="relative grid grid-cols-2 md:flex md:flex-row md:items-start md:justify-between gap-6 md:gap-4 pt-8">
+          {/* Horizontal line on desktop only */}
+          <div className="hidden md:block absolute top-0 left-0 w-full h-0.5 bg-gray-300 dark:bg-gray-600 z-0" />
 
           {education.map((edu, index) => (
             <div
               key={index}
-              className="relative flex flex-col transform hover:-translate-y-2 items-center text-center text-black flex-1 px-2"
+              className="relative flex flex-col transform hover:-translate-y-2 items-center text-center text-black w-full md:flex-1 md:min-w-0 px-2"
             >
-              <div className="w-4 h-4 bg-accent-foreground rounded-full absolute top-0 z-10 translate-y-[-50%]" />
+              <div className="w-4 h-4 bg-accent-foreground rounded-full absolute top-0 z-10 translate-y-[-50%] md:top-0" />
 
-              <div className="mt-6">
+              <div className="mt-6 w-full min-w-0">
                 <Image
                   src={edu.src}
                   alt={edu.name}
                   width={60}
                   height={60}
-                  className={`mx-auto mb-2 ${
+                  className={`mx-auto mb-2 w-12 h-12 sm:w-[60px] sm:h-[60px] ${
                   (edu as { invertInDark?: boolean; invertInLight?: boolean }).invertInLight
                     ? "invert dark:invert-0"
                     : (edu as { invertInDark?: boolean; invertInLight?: boolean }).invertInDark
@@ -457,10 +465,10 @@ export default function Home() {
                       : ""
                 }`}
                 />
-                <h3 className="text-md font-semibold text-black dark:text-white">
+                <h3 className="text-sm sm:text-base font-semibold text-black dark:text-white break-words">
                   {edu.name}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 break-words">
                   {edu.degree}
                 </p>
               </div>
