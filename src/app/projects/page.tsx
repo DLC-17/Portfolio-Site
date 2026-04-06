@@ -1,95 +1,98 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { fetchProjects, urlFor } from "@/sanity/sanity-utils";
-import { Image } from 'sanity';
+import { useEffect, useState } from "react";
+import { fetchFeaturedProjects, fetchProjects } from "@/sanity/sanity-utils";
+import type { Image } from "sanity";
+import { FeaturedProjectBlock } from "@/components/projects/featured-project-block";
+import { ProjectCard, type ProjectCardData } from "@/components/projects/project-card";
+import { ProjectsPageLoadingSkeleton } from "@/components/projects/project-skeletons";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Project = {
   _id: string;
   title: string;
   description: string;
-  technologies?: string[]; // optional, in case it's undefined
-  mainImage?:  Image;
+  technologies?: string[];
+  mainImage?: Image;
   demoUrl?: string;
   githubUrl?: string;
 };
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [allProjects, setAllProjects] = useState<Project[]>([]);
+  const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getProjects = async () => {
+    const load = async () => {
       try {
-        const data = await fetchProjects();
-        setProjects(data);
+        const [all, featured] = await Promise.all([fetchProjects(), fetchFeaturedProjects()]);
+        setAllProjects(all);
+        setFeaturedProjects(featured);
       } catch (err) {
-        setError('Failed to fetch projects.');
+        setError("Failed to fetch projects.");
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
-
-    getProjects();
+    load();
   }, []);
 
+  const listAsCardData = (list: Project[]): ProjectCardData[] =>
+    list.map((p) => ({
+      _id: p._id,
+      title: p.title,
+      description: p.description,
+      technologies: p.technologies,
+      mainImage: p.mainImage,
+      demoUrl: p.demoUrl,
+      githubUrl: p.githubUrl,
+    }));
+
   return (
-    <div className=" h-screen text-black pt-20 dark:text-white py-12 px-6">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8">My Projects</h1>
+    <div className="min-h-svh bg-background px-6 py-16 pt-24 text-foreground md:px-8 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <header className="mb-12 md:mb-16">
+          <h1 className="text-3xl font-semibold tracking-[0.02em] md:text-4xl">Projects</h1>
+        </header>
 
         {loading ? (
-          <p className="text-center text-lg">Loading...</p>
+          <ProjectsPageLoadingSkeleton />
         ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
+          <p className="text-sm text-destructive">{error}</p>
         ) : (
-          <motion.div
-            layoutId="modal"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {projects.map((project) => (
-              <div
-                key={project._id}
-                className="outline-1 outline-black dark:outline-white p-6 rounded-lg shadow bg-gray-100 dark:bg-accent transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700 w-full max-w-md"
-              >
-                {project.mainImage && (
-                  <img
-                    src={urlFor(project.mainImage).width(800).url()}
-                    alt={project.title}
-                    className="rounded mb-4 object-cover h-48 w-full"
-                  />
-                )}
-                <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
-                <p className="text-gray-700 dark:text-gray-300 mb-4">{project.description}</p>
-
-                {project.technologies && (
-                  <p className="text-gray-500 font-bold dark:text-white mb-4">
-                    Tools Used: {project.technologies.join(', ') }
-                  </p>
-                )}
-
-                <div className="flex gap-4">
-                  {project.githubUrl && (
-                    <Link href={project.githubUrl} target="_blank" className="text-blue-500 hover:underline">
-                      GitHub
-                    </Link>
-                  )}
-                  {project.demoUrl && (
-                    <Link href={project.demoUrl} target="_blank" className="text-blue-500 hover:underline">
-                      Live Demo
-                    </Link>
-                  )}
+          <Tabs defaultValue="featured" className="w-full">
+            <TabsList className="mb-10">
+              <TabsTrigger value="featured">Featured</TabsTrigger>
+              <TabsTrigger value="all">All</TabsTrigger>
+            </TabsList>
+            <TabsContent value="featured" className="mt-0">
+              {featuredProjects.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No featured projects in Sanity. Toggle “Featured” on a project in Studio.
+                </p>
+              ) : (
+                <div className="flex flex-col gap-8 md:gap-10 lg:gap-12">
+                  {listAsCardData(featuredProjects).map((project, index) => (
+                    <FeaturedProjectBlock key={project._id} project={project} index={index} />
+                  ))}
                 </div>
-              </div>
-            ))}
-          </motion.div>
+              )}
+            </TabsContent>
+            <TabsContent value="all" className="mt-0">
+              {allProjects.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No projects in Sanity yet.</p>
+              ) : (
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10 xl:grid-cols-3">
+                  {listAsCardData(allProjects).map((project, index) => (
+                    <ProjectCard key={project._id} project={project} index={index} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         )}
       </div>
     </div>

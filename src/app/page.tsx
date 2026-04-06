@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import {
@@ -19,13 +19,16 @@ import {
   SiRobotframework,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
-import { Code2, Layout, Server, Cpu } from "lucide-react";
+import { Code2, Layout, Server, Cpu, MapPin } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { fetchFeaturedProjects, urlFor } from "@/sanity/sanity-utils";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { fetchFeaturedProjects } from "@/sanity/sanity-utils";
 import type { Image as SanityImage } from "sanity";
+import { ProjectCard, type ProjectCardData } from "@/components/projects/project-card";
+import { ProjectCardSkeleton } from "@/components/projects/project-skeletons";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 const education = [
   {
@@ -92,31 +95,43 @@ const experience: { title: string; company: string; date: string; location?: str
     date: "Sep 2025 – Present",
     location: "Remote",
     description: [
-      "Developed FastAPI endpoints to integrate voice agents with Playwright, utilizing WebSockets and asynchronous Python (Asyncio) to handle live web task execution",
-      "Optimized Playwright-based automation systems achieving 99.9% uptime, processing 400+ voice interactions monthly",
-      "Implemented dynamic adaptation logic resulting in a reduction of failure rate by 30%, maintaining continuity across real-time processes",
-    ],
+      "Engineered LLM orchestration and scraper frameworks to automate mission-critical data acquisition using Python and Playwright ",
+      "Developed and optimized scalable automation systems achieving 99.9% operational reliability across volatile, client-facing environments ",
+      "Refined prompt logic and implemented dynamic adaptation logic to handle complex edge cases and maintain continuity in real-time processes ",
+      ],
   },
   {
     title: "Technical Consultant",
-    company: "Coleman Technical Consulting",
+    company: "Independent",
     date: "May 2025 – Present",
     location: "Bay Area, CA",
     description: [
-      "Architected scalable technical solutions for early-stage startups, transforming high-level product visions into production-ready MVPs with a focus on accelerated time-to-market",
-      "Engineered modular systems to let non-technical stakeholders configure complex product logic, reducing manual setup time and speeding feature rollout",
-    ],
+      "Architected market-ready technical infrastructures for CEOs, transitioning from vision to production-grade deployment in ambiguous startup environments ",
+      "Developed modular, decoupled system frameworks from the ground up to ensure high availability and long-term operational scalability ",
+      "Owned the technical roadmap for early-stage ventures, aligning complex engineering efforts with critical business milestones and product-market fit ",
+      ],
   },
+    {
+    title: "Software Engineer Intern",
+    company: "Saint Mary's College of California",
+    date: "February 2024 – August 2024",
+    location: "Moraga, CA, USA",
+    description: [
+    "Engineered a modular, node-based audio engine using Vanilla JavaScript and containerized the local development environment with Docker to ensure cross-platform deployment consistency",
+    "Implemented Finite State Machine (FSM) automata logic to trigger real-time audio notes based on node and edge traversal",
+    "Developed JSON serialization functionality enabling users to import and export complex automata configurations for local storage and rendering",
+    ],
+    },
   {
     title: "AI Systems Specialist",
     company: "Infinitus Systems, Inc",
     date: "Dec 2023 – Jan 2024",
     location: "San Francisco, CA",
     description: [
-      "Managed automated insurance workflows for a proprietary Voice AI agent, ensuring 100% accuracy in patient benefit verification during high-volume spikes",
-      "Executed real-time overrides for 100+ AI interactions to resolve hallucinations and edge cases, maintaining data integrity for mission-critical insurance calls in a regulated industry",
-      "Validated unstructured data extraction from live calls to ensure precision in claims-adjacent processing and provider-facing data synchronization",
-    ],
+      "Served as a critical Human-in-the-Loop (HITL) layer for a proprietary Voice AI agent, maintaining 100% data accuracy during high-volume operational spikes ",
+      "Identified and resolved AI hallucinations and logic drift in real-time to preserve the integrity of sensitive patient insurance data in production ",
+      "Analyzed live AI-to-client interactions to identify failure patterns, providing technical feedback to refine agent decision-making logic ",
+      ],
   },
   {
     title: "ML Research Intern",
@@ -128,9 +143,18 @@ const experience: { title: string; company: string; date: string; location?: str
       "Conducted a structured user study to quantify model response quality, presenting findings at HCI International 2024",
     ],
   },
+  {
+    title: "IT Analyst",
+    company: "Saint Mary's College of California",
+    date: "September 2022 – May 2025",
+    location: "Moraga, CA, USA",
+    description: [
+    "Managed high-availability technical operations and network diagnostics for a distributed ecosystem of 2,000+ faculty, students, and staff",
+    "Spearheaded a campus-wide security infrastructure migration to Multi-Factor Authentication (MFA), achieving 100% user adoption",
+    "Facilitated stakeholder education and technical troubleshooting to bridge the gap between security requirements and user experience",
+    ],
+    },
 ];
-
-const PROJECT_TYPES = ["Contract", "Full-time", "Part-time"] as const;
 
 type FeaturedProject = {
   _id: string;
@@ -142,15 +166,33 @@ type FeaturedProject = {
   githubUrl?: string;
 };
 
+const fadeUp = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-40px" as const },
+  transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1] as const },
+};
+
+const heroEnter = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const },
+};
+
+function staggerDelay(index: number) {
+  return { ...fadeUp, transition: { ...fadeUp.transition, delay: index * 0.06 } };
+}
+
 export default function Home() {
+  const experienceSectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: experienceScrollProgress } = useScroll({
+    target: experienceSectionRef,
+    offset: ["start 0.85", "end 0.35"],
+  });
+  const experienceBarHeight = useTransform(experienceScrollProgress, [0, 1], ["0%", "100%"]);
+
   const [selectedExpertiseIndex, setSelectedExpertiseIndex] = useState<number | null>(0);
   const selectedCategory = selectedExpertiseIndex !== null ? expertiseCategories[selectedExpertiseIndex] : null;
-  const [contactName, setContactName] = useState("");
-  const [projectType, setProjectType] = useState("");
-  const [contactMessage, setContactMessage] = useState("");
-  const [honeypot, setHoneypot] = useState("");
-  const [contactStatus, setContactStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [contactError, setContactError] = useState("");
   const [featuredProjects, setFeaturedProjects] = useState<FeaturedProject[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
 
@@ -168,98 +210,71 @@ export default function Home() {
     load();
   }, []);
 
-  const handleContactSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setContactStatus("loading");
-    setContactError("");
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: contactName,
-          projectType,
-          message: contactMessage,
-          from:'contact@dc-dev.space',
-          website: honeypot,
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setContactStatus("error");
-        setContactError((data as { error?: string }).error || "Something went wrong. Please try again.");
-        return;
-      }
-      setContactStatus("success");
-      setContactName("");
-      setProjectType("");
-      setContactMessage("");
-    } catch {
-      setContactStatus("error");
-      setContactError("Something went wrong. Please try again.");
-    }
-  };
-
   return (
-    <main className="flex flex-col w-full justify-center items-center  px-6 text-center space-y-16">
+    <main className="flex w-full flex-col items-center space-y-20 px-6 text-center md:space-y-24">
       {/* About Section */}
-      <div className="pt-35 flex flex-col px-4 py-10 max-w-6xl mx-auto w-full">
-        <section
-          id="about"
-          className="w-full text-center md:text-left mb-6"
-        >
-          <h1 className="text-5xl text-center font-bold text-black dark:text-white">
+      <div className="mx-auto flex w-full max-w-5xl flex-col px-4 pb-10 pt-28 md:pt-32">
+        <motion.section id="about" className="mb-10 w-full md:mb-14" {...heroEnter}>
+          <h1 className="text-balance text-center font-semibold tracking-[0.02em] text-foreground md:text-left text-4xl md:text-5xl">
             David Coleman
           </h1>
-          <h2 className="text-2xl text-center font-semibold text-gray-700 dark:text-gray-300 mt-2">
+          <p className="mt-3 text-center text-sm font-medium uppercase tracking-[0.12em] text-muted-foreground md:text-left">
             Forward Deployed Engineer
-          </h2>
-          <p className="mt-2 text-lg text-center text-gray-600 dark:text-gray-400">
-            Building production AI systems—from voice agents to MCP tooling
           </p>
-
-          <p className="mt-4 text-lg text-center text-gray-600 dark:text-gray-300">
-            Take a second and check out my portfolio showcasing my work in
-            software development.
+          <p className="mx-auto mt-6 max-w-2xl text-center text-base leading-relaxed text-muted-foreground md:mx-0 md:text-left md:text-lg">
+            Building production AI systems—from voice agents to MCP tooling.
           </p>
-          {/* Contact Section */}
-          <section id="contact" className="w-full max-w-6xl text-center pb-6">
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
-              Feel free to reach out via the platforms below:
-            </p>
-            <div className="flex justify-center gap-6">
+          <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground md:mx-0 md:text-left">
+            Portfolio focused on software development and technical delivery.
+          </p>
+          <section id="contact" className="mt-10 w-full pb-2 md:text-left">
+            <p className="mb-4 text-sm text-muted-foreground">Get in touch</p>
+            <div className="flex justify-center gap-8 md:justify-start">
               <a
                 href="https://github.com/DLC-17"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-transform duration-300 hover:scale-110 hover:rotate-6 dark:text-white hover:text-gray-300 dark:hover:text-gray-600"
+                className="text-foreground/80 transition-colors hover:text-foreground"
+                aria-label="GitHub"
               >
-                <FaGithub size={28} />
+                <FaGithub size={22} />
               </a>
               <a
                 href="https://www.linkedin.com/in/david-coleman17/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="transition-transform duration-300 hover:scale-110 hover:rotate-6  hover:text-gray-300 dark:hover:text-gray-600"
+                className="text-foreground/80 transition-colors hover:text-foreground"
+                aria-label="LinkedIn"
               >
-                <FaLinkedin size={28} />
+                <FaLinkedin size={22} />
               </a>
-              <a
-                href="mailto:david@dc-dev.space"
-                className="transition-transform duration-300 hover:scale-110 hover:rotate-6 hover:text-gray-300 dark:hover:text-gray-600"
-              >
-                <FaEnvelope size={28} />
-              </a>
+              <div className="flex items-center gap-2.5">
+                <a
+                  href="mailto:david@dc-dev.space"
+                  className="text-foreground/80 transition-colors hover:text-foreground"
+                  aria-label="Email"
+                >
+                  <FaEnvelope size={22} />
+                </a>
+                <span className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <MapPin className="size-4 shrink-0 opacity-80" aria-hidden />
+                  SF Bay Area
+                </span>
+              </div>
             </div>
           </section>
-        </section>
+        </motion.section>
 
         {/* Technical Expertise - selectable category icons with labels, skills horizontal below; click again to toggle off */}
-        <section id="expertise" className="w-full">
-          <h2 className="text-2xl font-bold text-black dark:text-white mb-4">
-            Technical Expertise
+        <motion.section
+          id="expertise"
+          className="w-full border-t border-zinc-200/80 pt-12 dark:border-zinc-800/80 md:pt-14"
+          {...fadeUp}
+        >
+          <h2 className="mb-8 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:text-left md:text-3xl">
+            Technical expertise
           </h2>
-          <div className="flex flex-wrap justify-center gap-3 mb-4">
+          <div className="mb-6 flex flex-wrap justify-center gap-2 md:justify-start">
             {expertiseCategories.map((cat, index) => {
               const Icon = cat.icon;
               const isSelected = index === selectedExpertiseIndex;
@@ -268,196 +283,169 @@ export default function Home() {
                   key={cat.group}
                   type="button"
                   onClick={() => setSelectedExpertiseIndex(isSelected ? null : index)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-300 outline-1 outline-black dark:outline-white shadow-md hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] ${
+                  className={`flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium shadow-sm transition-all duration-300 ${
                     isSelected
-                      ? "bg-gray-300 dark:bg-gray-700"
-                      : "bg-gray-100 dark:bg-accent hover:bg-gray-300 dark:hover:bg-gray-700"
+                      ? "border-zinc-300/80 bg-muted text-foreground dark:border-zinc-600/80"
+                      : "border-zinc-200/80 bg-card text-muted-foreground hover:border-zinc-300/80 hover:text-foreground dark:border-zinc-800/80 dark:hover:border-zinc-700/80"
                   }`}
                   aria-label={cat.group}
                   aria-pressed={isSelected}
                 >
-                  <Icon
-                    size={22}
-                    className={`shrink-0 ${isSelected ? "text-black dark:text-white" : "text-gray-600 dark:text-gray-400"}`}
-                  />
-                  <span className={`text-sm font-medium ${isSelected ? "text-black dark:text-white" : "text-gray-600 dark:text-gray-400"}`}>
-                    {cat.group}
-                  </span>
+                  <Icon size={18} className="shrink-0" />
+                  <span>{cat.group}</span>
                 </button>
               );
             })}
           </div>
           {selectedCategory ? (
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-2 md:justify-start">
               {selectedCategory.items.map((name) => {
                 const Icon = skillIcons[name];
                 return (
-                  <div
+                  <Badge
                     key={name}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg shadow-md bg-gray-100 dark:bg-accent outline-1 outline-black dark:outline-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700"
+                    variant="muted"
+                    className="flex items-center gap-1.5 px-2.5 py-1 font-normal"
                   >
-                    {Icon ? (
-                      <Icon size={20} className="text-black dark:text-white shrink-0" />
-                    ) : null}
-                    <span className="text-sm text-black dark:text-white font-medium">
-                      {name}
-                    </span>
-                  </div>
+                    {Icon ? <Icon size={14} className="shrink-0" /> : null}
+                    {name}
+                  </Badge>
                 );
               })}
             </div>
           ) : null}
-        </section>
+        </motion.section>
 
         {/* Featured Projects */}
-        {featuredProjects.length > 0 && (
-          <section id="featured-projects" className="w-full mt-12">
-            <h2 className="text-2xl font-bold text-black dark:text-white mb-6">
-              Featured Projects
-            </h2>
+        {(projectsLoading || featuredProjects.length > 0) && (
+          <motion.section
+            id="featured-projects"
+            className="mt-16 w-full border-t border-zinc-200/80 pt-10 dark:border-zinc-800/80 md:mt-20 md:pt-14"
+            {...fadeUp}
+          >
+            <div className="mb-8 flex flex-col gap-2 text-center md:flex-row md:items-end md:justify-between md:text-left">
+              <h2 className="text-2xl font-semibold tracking-[0.02em] text-foreground md:text-3xl">Featured projects</h2>
+              <Link
+                href="/projects"
+                className="text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                View all projects
+              </Link>
+            </div>
             {projectsLoading ? (
-              <p className="text-gray-600 dark:text-gray-400">Loading projects…</p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                {featuredProjects.map((project) => (
-                  <div
-                    key={project._id}
-                    className="w-full max-w-md outline-1 outline-black dark:outline-white p-6 rounded-lg shadow-md bg-gray-100 dark:bg-accent transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700"
-                  >
-                    {project.mainImage && (
-                      <img
-                        src={urlFor(project.mainImage).width(800).url()}
-                        alt={project.title}
-                        className="rounded mb-4 object-cover h-40 w-full"
-                      />
-                    )}
-                    <h3 className="text-lg font-semibold text-black dark:text-white mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-700 dark:text-gray-300 text-sm mb-4 line-clamp-2">
-                      {project.description}
-                    </p>
-                    {project.technologies && (
-                      <p className="text-gray-500 dark:text-gray-400 text-xs mb-4">
-                        {project.technologies.join(", ")}
-                      </p>
-                    )}
-                    <div className="flex gap-3">
-                      {project.githubUrl && (
-                        <Link
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        >
-                          GitHub
-                        </Link>
-                      )}
-                      {project.demoUrl && (
-                        <Link
-                          href={project.demoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
-                        >
-                          Live Demo
-                        </Link>
-                      )}
-                    </div>
-                  </div>
+              <div
+                className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:gap-10 lg:grid-cols-3"
+                aria-busy="true"
+                aria-label="Loading featured projects"
+              >
+                {[0, 1, 2].map((i) => (
+                  <ProjectCardSkeleton key={i} />
                 ))}
               </div>
+            ) : featuredProjects.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No featured projects yet. Mark items as featured in Sanity Studio.</p>
+            ) : (
+              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:gap-10 lg:grid-cols-3">
+                {featuredProjects.map((project, index) => {
+                  const data: ProjectCardData = {
+                    _id: project._id,
+                    title: project.title,
+                    description: project.description,
+                    technologies: project.technologies,
+                    mainImage: project.mainImage,
+                    demoUrl: project.demoUrl,
+                    githubUrl: project.githubUrl,
+                  };
+                  return <ProjectCard key={project._id} project={data} index={index} />;
+                })}
+              </div>
             )}
-            <Link
-              href="/projects"
-              className="inline-block mt-4 text-blue-600 dark:text-blue-400 hover:underline font-medium"
-            >
-              View all projects →
-            </Link>
-          </section>
+          </motion.section>
         )}
       </div>
 
-      {/* Experience Section - Vertical timeline; stacked on mobile, alternating on desktop */}
-      <section id="experience" className="w-full max-w-4xl mx-auto px-4">
-        <h2 className="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-6 sm:mb-10">
+      {/* Experience — vertical stack of cards + scroll-linked left rail */}
+      <motion.section
+        ref={experienceSectionRef}
+        id="experience"
+        className="mx-auto w-full max-w-5xl px-4 pb-4 pt-16 md:pt-20"
+        {...fadeUp}
+      >
+        <h2 className="mb-10 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:mb-8 md:pl-[calc(1rem+0.25rem)] md:text-left md:text-3xl">
           Experience
         </h2>
-        <div className="relative">
-          {/* Vertical line: left on mobile, center on desktop */}
-          <div className="absolute left-2 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600 z-0 md:left-1/2 md:-translate-x-1/2" />
-          {experience.map((job, index) => {
-            const isLeft = index % 2 === 0;
-            const dateBlock = (
-              <div className="flex flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400 text-xs sm:text-sm whitespace-nowrap">
-                <span>{job.date}</span>
-                {job.location ? <span>{job.location}</span> : null}
-              </div>
-            );
-            const card = (
-              <div className="outline-1 outline-black dark:outline-white p-4 sm:p-6 rounded-lg shadow-md bg-gray-100 dark:bg-accent transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:scale-[1.02] hover:bg-gray-300 dark:hover:bg-gray-700 text-center w-full min-w-0">
-                <h3 className="text-lg sm:text-xl font-semibold text-black dark:text-white">
-                  {job.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">{job.company}</p>
-                <ul className="list-disc list-inside mt-2 space-y-1 text-center mx-auto text-xs sm:text-sm max-w-xl">
-                  {job.description.map((desc, i) => (
-                    <li key={i} className="text-gray-600 dark:text-gray-300 text-left">
-                      {desc}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-            return (
-              <div
-                key={index}
-                className="relative flex flex-col md:flex-row w-full mb-6 sm:mb-8 z-10 pl-8 md:pl-0"
-              >
-                {/* Mobile: timeline dot on left */}
-                <div className="absolute left-0 top-5 w-3 h-3 rounded-full bg-accent-foreground border-4 border-gray-100 dark:border-gray-900 shrink-0 z-20 md:left-1/2 md:-translate-x-1/2 md:top-6 md:w-4 md:h-4" />
-                {/* Mobile: date then card, full width */}
-                <div className="md:hidden mb-2">
-                  {dateBlock}
-                </div>
-                <div className="md:hidden w-full">{card}</div>
-                {/* Desktop: alternating left/right */}
-                <div className="hidden md:flex w-1/2 pr-4 justify-end items-start">
-                  {isLeft ? card : dateBlock}
-                </div>
-                <div className="hidden md:flex w-1/2 pl-4 justify-start items-start">
-                  {isLeft ? dateBlock : card}
-                </div>
-              </div>
-            );
-          })}
+        <div className="flex gap-5 md:gap-6">
+          {/* Scroll-progress rail (desktop) */}
+          <div
+            className="relative hidden w-1 shrink-0 self-stretch overflow-hidden rounded-full bg-zinc-200/80 dark:bg-zinc-800/80 md:block"
+            aria-hidden
+          >
+            <motion.div
+              className="absolute left-0 top-0 w-full rounded-full bg-foreground/35 dark:bg-foreground/45"
+              style={{ height: experienceBarHeight }}
+            />
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col gap-6 md:gap-8">
+          {experience.map((job, index) => (
+            <motion.div key={`${job.company}-${job.title}-${index}`} {...staggerDelay(index)} className="w-full">
+              <Card className="border-zinc-200/80 text-left shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800/80">
+                <CardHeader className="space-y-3 pb-2">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                    <div>
+                      <CardTitle className="text-base sm:text-lg">{job.title}</CardTitle>
+                      <p className="mt-1 text-sm font-medium text-muted-foreground">{job.company}</p>
+                    </div>
+                    <div className="shrink-0 text-left text-xs text-muted-foreground sm:text-right sm:text-sm">
+                      <p className="whitespace-nowrap">{job.date}</p>
+                      {job.location ? <p className="whitespace-nowrap">{job.location}</p> : null}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <ul className="space-y-2.5 pt-2">
+                    {job.description.map((desc, i) => (
+                      <li key={i} className="flex gap-2 text-pretty text-sm leading-relaxed text-muted-foreground">
+                        <span className="mt-0.5 shrink-0 text-foreground/35" aria-hidden>
+                          –
+                        </span>
+                        <span>{desc}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+          </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Education Section - stacked on mobile, horizontal on desktop */}
-      <section id="education" className="w-full max-w-6xl mx-auto pb-10 px-4">
-        <h2 className="text-2xl sm:text-3xl font-bold text-black dark:text-white mb-6 text-center">
+      <motion.section
+        id="education"
+        className="mx-auto w-full max-w-6xl border-t border-zinc-200/80 px-4 pb-16 pt-16 dark:border-zinc-800/80 md:pt-20"
+        {...fadeUp}
+      >
+        <h2 className="mb-8 text-center text-2xl font-semibold tracking-[0.02em] text-foreground sm:text-3xl">
           Education
         </h2>
 
-        <div className="relative grid grid-cols-2 md:flex md:flex-row md:items-start md:justify-between gap-6 md:gap-4 pt-8">
-          {/* Horizontal line on desktop only */}
-          <div className="hidden md:block absolute top-0 left-0 w-full h-0.5 bg-gray-300 dark:bg-gray-600 z-0" />
+        <div className="relative grid grid-cols-2 gap-4 pt-6 md:flex md:items-start md:justify-between md:gap-4 md:pt-8">
+          <div className="absolute left-0 top-0 z-0 hidden h-px w-full bg-zinc-200/80 md:block dark:bg-zinc-800/80" />
 
           {education.map((edu, index) => (
-            <div
-              key={index}
-              className="relative flex flex-col transform hover:-translate-y-2 items-center text-center text-black w-full md:flex-1 md:min-w-0 px-2"
+            <motion.div key={index} {...staggerDelay(index)} className="md:flex-1 md:min-w-0">
+            <Card
+              className="relative flex h-full flex-col items-center border-zinc-200/80 bg-card text-center shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800/80"
             >
-              <div className="w-4 h-4 bg-accent-foreground rounded-full absolute top-0 z-10 translate-y-[-50%] md:top-0" />
-
-              <div className="mt-6 w-full min-w-0">
+              <div className="absolute top-0 z-10 size-2.5 -translate-y-1/2 rounded-full bg-foreground md:left-1/2 md:-translate-x-1/2" />
+              <CardContent className="flex w-full min-w-0 flex-col items-center px-3 pb-6 pt-8 sm:px-4">
                 <Image
                   src={edu.src}
                   alt={edu.name}
-                  width={60}
-                  height={60}
-                  className={`mx-auto mb-2 w-12 h-12 sm:w-[60px] sm:h-[60px] ${
+                  width={0}
+                  height={0}
+                  className={`mb-3 w-12 sm:w-[60px] ${
                   (edu as { invertInDark?: boolean; invertInLight?: boolean }).invertInLight
                     ? "invert dark:invert-0"
                     : (edu as { invertInDark?: boolean; invertInLight?: boolean }).invertInDark
@@ -465,19 +453,18 @@ export default function Home() {
                       : ""
                 }`}
                 />
-                <h3 className="text-sm sm:text-base font-semibold text-black dark:text-white break-words">
+                <h3 className="break-words text-xs font-semibold text-foreground sm:text-sm">
                   {edu.name}
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 break-words">
+                <p className="mt-1 break-words text-[11px] leading-snug text-muted-foreground sm:text-xs">
                   {edu.degree}
                 </p>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
+            </motion.div>
           ))}
         </div>
-      </section>
-
-      
+      </motion.section>
     </main>
   );
 }

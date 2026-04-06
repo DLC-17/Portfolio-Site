@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ModeToggle } from "@/components/ui/mode-toggle";
-import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Navbar items - use /#anchor for homepage sections so links work from any page
 const navItems = [
   { name: "About", link: "/#about" },
   { name: "Projects", link: "/projects" },
@@ -22,76 +21,67 @@ export default function Header() {
     setIsClient(true);
   }, []);
 
-  return (
-    <header
-      className="w-full fixed top-0 left-0 shadow-md z-50 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-70
-"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
-        {/* DLC Logo */}
-        <motion.div
-          className="text-xl sm:text-2xl font-bold text-black dark:text-white transition duration-300"
-          whileHover={{ scale: 1.1 }}
-        >
-          <Link href="/">DLC</Link>
-        </motion.div>
+  const linkClass = (active: boolean) =>
+    cn(
+      "rounded-md px-3 py-2 text-sm font-medium tracking-wide transition-colors",
+      active
+        ? "text-foreground"
+        : "text-muted-foreground hover:text-foreground",
+    );
 
-        {/* Desktop Navigation - hidden on mobile */}
-        <nav className="hidden md:flex max-w-xl space-x-4 lg:space-x-6">
+  return (
+    <header className="fixed top-0 left-0 z-50 w-full border-b border-zinc-200/80 bg-background/80 backdrop-blur-md dark:border-zinc-800/80">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+        <Link
+          href="/"
+          className="text-sm font-semibold tracking-[0.12em] text-foreground transition-opacity hover:opacity-80"
+        >
+          DLC
+        </Link>
+
+        <nav className="hidden items-center gap-1 md:flex">
           {navItems.map(({ name, link }) => {
+            const hash = link.includes("#") ? link.slice(link.indexOf("#")) : "";
             const isActive =
               pathname === link ||
-              (link.startsWith("#") &&
+              (link === "/projects" && pathname === "/projects") ||
+              (link.startsWith("/#") &&
+                pathname === "/" &&
                 isClient &&
-                pathname + link === window.location.hash);
+                (hash === "" || window.location.hash === hash));
             return (
-              <Link
-                key={name}
-                href={link}
-                className={`px-2 sm:px-3 py-2 sm:py-2 rounded-md text-large font-medium ${
-                  isActive
-                    ? "bg-blue-900 text-white dark:bg-accent dark:text-white"
-                    : "text-gray-700 hover:bg-gray-400 dark:text-gray-300 dark:hover:bg-gray-700"
-                }`}
-              >
+              <Link key={name} href={link} className={linkClass(!!isActive)}>
                 {name}
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center space-x-2 sm:space-x-4">
-          {/* Mode Toggle */}
+        <div className="flex items-center gap-2">
           <ModeToggle />
-
-          {/* Mobile menu button */}
           <button
-            className="md:hidden p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+            type="button"
+            className="rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground md:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-expanded={isMobileMenuOpen}
+            aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
-        {/* Mobile Menu - shown only when open */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-white dark:bg-gray-900 shadow-lg">
-            <nav className="flex flex-col space-y-2 p-4">
+        {isMobileMenuOpen ? (
+          <div className="absolute top-full left-0 right-0 border-b border-zinc-200/80 bg-background shadow-sm dark:border-zinc-800/80 md:hidden">
+            <nav className="flex flex-col gap-0 p-2">
               {navItems.map(({ name, link }) => {
                 const isActive =
                   pathname === link ||
-                  (link.startsWith("#") &&
-                    isClient &&
-                    pathname + link === window.location.hash);
+                  (link === "/projects" && pathname === "/projects");
                 return (
                   <Link
                     key={name}
                     href={link}
-                    className={`px-4 py-3 rounded-md text-base font-medium ${
-                      isActive
-                        ? "bg-blue-900 text-white"
-                        : "text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
-                    }`}
+                    className={cn(linkClass(!!isActive), "px-4 py-3")}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {name}
@@ -100,7 +90,7 @@ export default function Header() {
               })}
             </nav>
           </div>
-        )}
+        ) : null}
       </div>
     </header>
   );
