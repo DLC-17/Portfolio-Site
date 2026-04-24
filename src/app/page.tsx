@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaCamera } from "react-icons/fa";
 import {
   SiJavascript,
   SiTypescript,
@@ -247,6 +247,15 @@ export default function Home() {
                 aria-label="LinkedIn"
               >
                 <FaLinkedin size={22} />
+              </a>
+              <a
+                href="https://dlc-17.github.io/Personal-site/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground/80 transition-colors hover:text-foreground"
+                aria-label="Personal Site"
+              >
+                <FaCamera size={22} />
               </a>
               <div className="flex items-center gap-2.5">
                 <a
