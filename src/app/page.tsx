@@ -88,40 +88,63 @@ const expertiseCategories: { group: string; items: string[]; icon: LucideIcon }[
   { group: "AI/ML", items: ["NLP", "LLM orchestration", "MCP", "Agentic systems"], icon: Cpu },
 ];
 
-const experience: { title: string; company: string; date: string; location?: string; description: string[] }[] = [
+const experience: {
+  title: string;
+  company: string;
+  date: string;
+  location?: string;
+  // Updated type to accept either strings OR the link objects
+  description: (string | { name: string; url: string })[];
+}[] = [
   {
-    title: "Forward Deployed Engineer",
-    company: "Spoqen",
-    date: "Sep 2025 – Present",
-    location: "Remote",
-    description: [
-      "Engineered LLM orchestration and scraper frameworks to automate mission-critical data acquisition using Python and Playwright ",
-      "Developed and optimized scalable automation systems achieving 99.9% operational reliability across volatile, client-facing environments ",
-      "Refined prompt logic and implemented dynamic adaptation logic to handle complex edge cases and maintain continuity in real-time processes ",
-      ],
-  },
-  {
-    title: "Technical Consultant",
-    company: "Independent",
-    date: "May 2025 – Present",
+    title: "Founding Engineer",
+    company: "NDA Startup",
+    date: "Jan 2026 – Feb 2026",
     location: "Bay Area, CA",
     description: [
       "Architected market-ready technical infrastructures for CEOs, transitioning from vision to production-grade deployment in ambiguous startup environments ",
       "Developed modular, decoupled system frameworks from the ground up to ensure high availability and long-term operational scalability ",
       "Owned the technical roadmap for early-stage ventures, aligning complex engineering efforts with critical business milestones and product-market fit ",
-      ],
+    ],
   },
-    {
+  {
+    title: "Forward Deployed Engineer",
+    company: "Spoqen",
+    date: "Sep 2025 – Feb 2026",
+    location: "Remote",
+    description: [
+      "Engineered LLM orchestration and scraper frameworks to automate mission-critical data acquisition using Python and Playwright ",
+      "Developed and optimized scalable automation systems achieving 99.9% operational reliability across volatile, client-facing environments ",
+      "Refined prompt logic and implemented dynamic adaptation logic to handle complex edge cases and maintain continuity in real-time processes ",
+    ],
+  },
+  {
+    title: "Website Developer",
+    company: "Freelance",
+    date: "2025 - Present",
+    location: "Bay Area, CA",
+    description: [
+      {
+        name: "Marao Ethiopian Coffee",
+        url: "https://www.maraoethiopiancoffee.com", 
+      },
+      {
+        name: "Richard Trinh Photography",
+        url: "https://rt-portfolio-drab.vercel.app/", 
+      },
+    ],
+  }, // Added the missing comma here
+  {
     title: "Software Engineer Intern",
     company: "Saint Mary's College of California",
     date: "February 2024 – August 2024",
     location: "Moraga, CA, USA",
     description: [
-    "Engineered a modular, node-based audio engine using Vanilla JavaScript and containerized the local development environment with Docker to ensure cross-platform deployment consistency",
-    "Implemented Finite State Machine (FSM) automata logic to trigger real-time audio notes based on node and edge traversal",
-    "Developed JSON serialization functionality enabling users to import and export complex automata configurations for local storage and rendering",
+      "Engineered a modular, node-based audio engine using Vanilla JavaScript and containerized the local development environment with Docker to ensure cross-platform deployment consistency",
+      "Implemented Finite State Machine (FSM) automata logic to trigger real-time audio notes based on node and edge traversal",
+      "Developed JSON serialization functionality enabling users to import and export complex automata configurations for local storage and rendering",
     ],
-    },
+  },
   {
     title: "AI Systems Specialist",
     company: "Infinitus Systems, Inc",
@@ -131,7 +154,18 @@ const experience: { title: string; company: string; date: string; location?: str
       "Served as a critical Human-in-the-Loop (HITL) layer for a proprietary Voice AI agent, maintaining 100% data accuracy during high-volume operational spikes ",
       "Identified and resolved AI hallucinations and logic drift in real-time to preserve the integrity of sensitive patient insurance data in production ",
       "Analyzed live AI-to-client interactions to identify failure patterns, providing technical feedback to refine agent decision-making logic ",
-      ],
+    ],
+  },
+  {
+    title: "IT Analyst",
+    company: "Saint Mary's College of California",
+    date: "September 2022 – May 2025",
+    location: "Moraga, CA, USA",
+    description: [
+      "Managed high-availability technical operations and network diagnostics for a distributed ecosystem of 2,000+ faculty, students, and staff",
+      "Spearheaded a campus-wide security infrastructure migration to Multi-Factor Authentication (MFA), achieving 100% user adoption",
+      "Facilitated stakeholder education and technical troubleshooting to bridge the gap between security requirements and user experience",
+    ],
   },
   {
     title: "ML Research Intern",
@@ -143,17 +177,7 @@ const experience: { title: string; company: string; date: string; location?: str
       "Conducted a structured user study to quantify model response quality, presenting findings at HCI International 2024",
     ],
   },
-  {
-    title: "IT Analyst",
-    company: "Saint Mary's College of California",
-    date: "September 2022 – May 2025",
-    location: "Moraga, CA, USA",
-    description: [
-    "Managed high-availability technical operations and network diagnostics for a distributed ecosystem of 2,000+ faculty, students, and staff",
-    "Spearheaded a campus-wide security infrastructure migration to Multi-Factor Authentication (MFA), achieving 100% user adoption",
-    "Facilitated stakeholder education and technical troubleshooting to bridge the gap between security requirements and user experience",
-    ],
-    },
+  
 ];
 
 type FeaturedProject = {
@@ -417,7 +441,19 @@ export default function Home() {
                         <span className="mt-0.5 shrink-0 text-foreground/35" aria-hidden>
                           –
                         </span>
-                        <span>{desc}</span>
+                          <span>
+ {typeof desc === 'string' ? (
+ desc
+ ) : (
+<Link
+  href={desc.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="text-blue-200 transition-colors hover:text-blue-800 hover:underline"
+>
+  {desc.name}
+</Link>
+ )}</span>
                       </li>
                     ))}
                   </ul>

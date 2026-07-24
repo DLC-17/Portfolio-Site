@@ -40,5 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /admin-studio/page.tsx
+/admin-studio/layout.tsx
 /admin-studio/
 src/app/admin-studio/page.tsx
+src/app/admin-studio/layout.tsx
