@@ -1,4 +1,6 @@
 // schemas/project.ts
+import type { Rule } from "sanity";
+
 export default {
   name: "project",
   title: "Project",
@@ -8,18 +10,21 @@ export default {
       name: "title",
       title: "Project Title",
       type: "string",
+      validation: (rule: Rule) => rule.required().min(2).max(100),
     },
     {
       name: "slug",
       title: "Slug",
       type: "slug",
       options: { source: "title", maxLength: 96 },
+      validation: (rule: Rule) => rule.required(),
     },
     {
       name: "description",
       title: "Short Description",
       type: "text",
       rows: 3,
+      validation: (rule: Rule) => rule.required().max(500),
     },
     {
       name: "technologies",
@@ -37,11 +42,21 @@ export default {
       name: "demoUrl",
       title: "Live Demo URL",
       type: "url",
+      validation: (rule: Rule) =>
+        rule.uri({
+          scheme: ["http", "https"],
+          allowRelative: false,
+        }),
     },
     {
       name: "githubUrl",
       title: "GitHub Repo URL",
       type: "url",
+      validation: (rule: Rule) =>
+        rule.uri({
+          scheme: ["http", "https"],
+          allowRelative: false,
+        }),
     },
     {
       name: "publishedAt",
@@ -51,7 +66,9 @@ export default {
     {
       name: "featured",
       title: "Featured",
-      type: "boolean"
+      type: "boolean",
+      initialValue: false,
     },
   ],
 };
+

@@ -42,7 +42,7 @@ export const fetchProjects = async () => {
 //fetch projects labeled as featured
 export const fetchFeaturedProjects = async () => {
   return await sanityClient.fetch(
-    groq`*[_type == "project" && featured == true] | order(publishedAt desc){
+    groq`*[_type == "project" && (featured == true || Featured == true)] | order(coalesce(publishedAt, _createdAt) desc){
       _id,
       title,
       slug,
@@ -56,3 +56,45 @@ export const fetchFeaturedProjects = async () => {
     }`
   )
 }
+
+export type ResumeData = {
+  _id?: string;
+  title?: string;
+  fileUrl?: string;
+  externalUrl?: string;
+  lastUpdated?: string;
+};
+
+// ✅ Fetch Resume
+export const fetchResume = async (): Promise<ResumeData | null> => {
+  try {
+    const data = await sanityClient.fetch(
+      groq`*[_id in ["resume", "drafts.resume"] || _type == "resume"] | order(_updatedAt desc)[0]{
+        _id,
+        title,
+        "fileUrl": resumeFile.asset->url,
+        externalUrl,
+        lastUpdated,
+        "assetUploadedAt": resumeFile.asset->_createdAt,
+        _updatedAt
+      }`
+    );
+
+    if (!data) return null;
+
+    // Automatically resolve the last updated day to the date of the asset file upload in Sanity
+    const uploadIso = data.assetUploadedAt || data._updatedAt;
+    const autoDate = uploadIso ? uploadIso.split("T")[0] : undefined;
+
+    return {
+      _id: data._id,
+      title: data.title,
+      fileUrl: data.fileUrl,
+      externalUrl: data.externalUrl,
+      lastUpdated: autoDate || data.lastUpdated,
+    };
+  } catch (error) {
+    console.error("Error fetching resume from Sanity:", error);
+    return null;
+  }
+};

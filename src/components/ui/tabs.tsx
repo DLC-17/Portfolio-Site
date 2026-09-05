@@ -39,7 +39,7 @@ function TabsList({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="tabs-list"
       role="tablist"
       className={cn(
-        "inline-flex h-9 w-fit items-center justify-center rounded-md border border-zinc-200/80 bg-muted/30 p-0.5 text-muted-foreground dark:border-zinc-800/80",
+        "inline-flex h-9 w-fit items-center justify-center rounded-md border border-border/80 bg-muted/30 p-0.5 text-muted-foreground",
         className,
       )}
       {...props}

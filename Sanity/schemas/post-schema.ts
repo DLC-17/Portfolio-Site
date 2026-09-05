@@ -1,4 +1,6 @@
 // schemas/post.ts
+import type { Rule } from "sanity";
+
 export default {
   name: "post",
   title: "Blog Post",
@@ -8,13 +10,14 @@ export default {
       name: "title",
       title: "Title",
       type: "string",
-      
+      validation: (rule: Rule) => rule.required().min(2).max(120),
     },
     {
       name: "slug",
       title: "Slug",
       type: "slug",
       options: { source: "title", maxLength: 96 },
+      validation: (rule: Rule) => rule.required(),
     },
     {
       name: "publishedAt",
@@ -37,6 +40,7 @@ export default {
       title: "Excerpt",
       type: "text",
       rows: 2,
+      validation: (rule: Rule) => rule.max(300),
     },
     {
       name: "body",
@@ -52,3 +56,4 @@ export default {
     },
   ],
 };
+

@@ -56,14 +56,14 @@ export function FeaturedProjectBlock({ project, index }: FeaturedProjectBlockPro
 
   return (
     <motion.div {...staggerDelay(index)} className="w-full">
-      <Card className="overflow-hidden border-zinc-200/80 text-left shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800/80">
+      <Card className="group overflow-hidden border-border/80 text-left shadow-sm transition-all duration-300 hover:border-primary/40 hover:shadow-xl">
         <div className="flex min-h-[min(56vw,280px)] flex-col md:min-h-[320px] lg:min-h-[360px] md:flex-row">
           {/* Image / visual column */}
           <div
             className={
               imageUrl
-                ? "relative aspect-[16/10] w-full shrink-0 border-b border-zinc-200/80 sm:aspect-[16/9] md:aspect-auto md:h-auto md:min-h-[320px] md:w-[min(46%,520px)] md:min-w-[300px] lg:min-h-[360px] lg:min-w-[360px] md:border-b-0 md:border-r dark:border-zinc-800/80"
-                : "relative hidden min-h-[200px] w-full shrink-0 bg-muted/40 md:flex md:min-h-[320px] md:w-[min(46%,520px)] md:min-w-[300px] lg:min-h-[360px] lg:min-w-[360px] md:border-r md:border-zinc-200/80 dark:md:border-zinc-800/80"
+                ? "relative aspect-[16/10] w-full shrink-0 overflow-hidden border-b border-border/80 sm:aspect-[16/9] md:aspect-auto md:h-auto md:min-h-[320px] md:w-[min(46%,520px)] md:min-w-[300px] lg:min-h-[360px] lg:min-w-[360px] md:border-b-0 md:border-r"
+                : "relative hidden min-h-[200px] w-full shrink-0 bg-muted/40 md:flex md:min-h-[320px] md:w-[min(46%,520px)] md:min-w-[300px] lg:min-h-[360px] lg:min-w-[360px] md:border-r md:border-border/80"
             }
           >
             {imageUrl ? (
@@ -71,7 +71,7 @@ export function FeaturedProjectBlock({ project, index }: FeaturedProjectBlockPro
                 src={imageUrl}
                 alt={project.title}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, 520px"
                 priority={index === 0}
               />
@@ -87,7 +87,7 @@ export function FeaturedProjectBlock({ project, index }: FeaturedProjectBlockPro
             <CardHeader className="space-y-3 p-0 pb-2">
               <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                 <div>
-                  <CardTitle className="text-xl font-semibold tracking-tight sm:text-2xl lg:text-[1.65rem] lg:leading-snug">
+                  <CardTitle className="text-xl font-semibold tracking-tight transition-colors duration-200 group-hover:text-primary sm:text-2xl lg:text-[1.65rem] lg:leading-snug">
                     {project.title}
                   </CardTitle>
                   {techLine ? (

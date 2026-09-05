@@ -6,7 +6,7 @@ const VALID_PROJECT_TYPES = ["Contract", "Full-time", "Part-time"] as const;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, projectType, message, website } = body;
+    const { name, email, phone, projectType, message, website } = body;
 
     // Honeypot: reject if bot-filled field has a value
     if (website && typeof website === "string" && website.trim()) {
@@ -19,6 +19,17 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    const trimmedEmail = typeof email === "string" ? email.trim() : "";
+    const trimmedPhone = typeof phone === "string" ? phone.trim() : "";
+
+    if (!trimmedEmail && !trimmedPhone) {
+      return NextResponse.json(
+        { error: "At least one form of contact (email or phone/LinkedIn) is required" },
+        { status: 400 }
+      );
+    }
+
     if (!VALID_PROJECT_TYPES.includes(projectType)) {
       return NextResponse.json(
         { error: "Invalid project type" },
@@ -50,9 +61,12 @@ export async function POST(request: Request) {
     const { data, error } = await resend.emails.send({
       from: "Portfolio Contact <contacat@dc-dev.space>",
       to: [toEmail],
+      replyTo: trimmedEmail || undefined,
       subject: `Portfolio contact from ${name.trim()}`,
       html: `
         <p><strong>Name:</strong> ${escapeHtml(name.trim())}</p>
+        ${trimmedEmail ? `<p><strong>Email:</strong> ${escapeHtml(trimmedEmail)}</p>` : ""}
+        ${trimmedPhone ? `<p><strong>Phone / LinkedIn:</strong> ${escapeHtml(trimmedPhone)}</p>` : ""}
         <p><strong>Project type:</strong> ${escapeHtml(projectType)}</p>
         <p><strong>Message:</strong></p>
         <p>${escapeHtml(message.trim()).replace(/\n/g, "<br />")}</p>
