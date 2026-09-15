@@ -1,37 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# David Coleman - Developer Portfolio
 
-## Getting Started
+A highly interactive, modern developer portfolio and blog built with Next.js 16, React 19, and Sanity CMS. Designed to showcase production-grade engineering, complete with an integrated AI avatar powered by Gemini 2.5 Flash, interactive WebGL backgrounds, and a global command palette.
 
-This project uses **Bun** for dependency management. Use `bun install` and `bun run dev` for consistency.
+## 🚀 Key Features
 
-First, run the development server:
+- **Integrated AI Avatar:** A custom chatbot powered by Google Gemini 2.5 Flash. It acts as an interactive persona grounded in David's real-world engineering experience to answer recruiter and client questions, complete with rate-limiting and streaming responses.
+- **Sanity CMS Integration:** Fully headless content management for the Resume, Featured Projects, and Developer Blog. Supports real-time updates, custom `PortableText` rendering, and rich code-block syntax highlighting (`@sanity/code-input`).
+- **Interactive WebGL Background:** Uses Three.js and React Three Fiber to render 3,000 floating particles that dynamically transition from a scattered sphere to a solid cube based on the user's scroll position. (Dynamically downscales to 800 particles on mobile for 60fps performance).
+- **Global Command Palette:** Hit `Cmd + K` anywhere on the site to trigger a Spotlight-style menu for instant navigation, theme toggling, and opening the AI chat.
+- **Modern UI & Animations:** Built with Tailwind CSS v4, Framer Motion (for spring physics and "scramble" text effects), and custom Lucide React iconography.
+- **Serverless Contact Form:** Secure contact API route utilizing `Resend` for transactional emails, complete with honeypot spam protection.
 
-```bash
-bun install
-bun run dev
-```
+## 🛠 Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Framework:** Next.js 16 (App Router) & React 19
+- **Styling:** Tailwind CSS v4, `tailwindcss-animate`, `@tailwindcss/typography`
+- **Animations & 3D:** Framer Motion, Three.js, `@react-three/fiber`, `@react-three/drei`
+- **CMS:** Sanity Studio & `next-sanity`
+- **AI / LLM:** `@google/genai` (Gemini 2.5 Flash)
+- **Email:** Resend
+- **Deployment:** Vercel (Recommended)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 💻 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses **npm** for dependency management.
 
-## Learn More
+1. **Clone and install dependencies:**
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+   *(Note: `--legacy-peer-deps` is required for React 19 compatibility with React Three Fiber)*
 
-To learn more about Next.js, take a look at the following resources:
+2. **Set up Environment Variables:**
+   Create a `.env.local` file in the root directory:
+   ```env
+   # Sanity Configuration
+   NEXT_PUBLIC_SANITY_PROJECT_ID=your_sanity_project_id
+   NEXT_PUBLIC_SANITY_DATASET=production
+   SANITY_REVALIDATE_SECRET=your_webhook_secret
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   # AI Configuration
+   GEMINI_API_KEY=your_gemini_api_key
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   # Contact Form (Resend)
+   RESEND_API_KEY=your_resend_api_key
+   CONTACT_EMAIL=your_receiving_email@domain.com
+   ```
 
-## Deploy on Vercel
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Access the CMS:**
+   Navigate to [http://localhost:3000/admin-studio](http://localhost:3000/admin-studio) to manage projects, blog posts, and your resume PDF directly from the browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📈 Production Deployment
 
-
-## UI
-The UI for the project utilzes shadcn,HeroUI and TailwindCSS
+This project is optimized for deployment on Vercel. Be sure to:
+1. Add all environment variables to your Vercel project settings.
+2. Set up a Sanity webhook pointing to `https://your-domain.com/api/revalidate` with your secret to enable on-demand ISR cache clearing when you publish new content.
+3. Verify your production domains in `src/app/api/chat/route.ts` to ensure the AI Chatbot accepts requests from your live URL.
