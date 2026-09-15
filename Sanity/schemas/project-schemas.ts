@@ -21,10 +21,11 @@ export default {
     },
     {
       name: "description",
-      title: "Short Description",
+      title: "Description",
+      description: "Overview and technical breakdown. Separate multiple points with newlines to render as clean bullets.",
       type: "text",
-      rows: 3,
-      validation: (rule: Rule) => rule.required().max(500),
+      rows: 5,
+      validation: (rule: Rule) => rule.required().max(2000),
     },
     {
       name: "technologies",

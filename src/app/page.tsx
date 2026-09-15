@@ -28,16 +28,17 @@ import type { IconType } from "react-icons";
 import { Code2, Layout, Server, Cpu, MapPin, ExternalLink, FileText, Mail } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { fetchFeaturedProjects, fetchProjects, fetchResume, type ResumeData } from "@/sanity/sanity-utils";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { fetchFeaturedProjects, fetchProjects, fetchResume, DEFAULT_RESUME_FALLBACK_URL, type ResumeData } from "@/sanity/sanity-utils";
 import type { Image as SanityImage } from "sanity";
 import { ProjectCard, type ProjectCardData } from "@/components/projects/project-card";
 import { ProjectCardSkeleton } from "@/components/projects/project-skeletons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-// import { ContactDialog } from "@/components/contact/contact-dialog";
+import { ContactDialog } from "@/components/contact/contact-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrambleHeader } from "@/components/ui/scramble-header";
 
 type EducationItem = {
   src: string;
@@ -292,7 +293,7 @@ export default function Home() {
     load();
   }, []);
 
-  const resumeUrl = resume?.fileUrl || resume?.externalUrl;
+  const resumeUrl = resume?.fileUrl || resume?.externalUrl || DEFAULT_RESUME_FALLBACK_URL;
 
   return (
     <main className="flex w-full flex-col items-center space-y-20 px-6 text-center md:space-y-24">
@@ -314,20 +315,12 @@ export default function Home() {
 
           {/* Action CTAs: Get in touch & Resume */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:justify-start">
-            {/* ContactDialog (Resend) - commented out
             <ContactDialog>
               <Button variant="default" className="gap-2 shadow-sm font-medium">
                 <Mail className="size-4" />
                 Get in Touch
               </Button>
             </ContactDialog>
-            */}
-            <Button variant="default" className="gap-2 shadow-sm font-medium" asChild>
-              <a href="mailto:david@dc-dev.space">
-                <Mail className="size-4" />
-                Get in Touch
-              </a>
-            </Button>
             {resumeUrl ? (
               <a
                 href={resumeUrl}
@@ -390,9 +383,10 @@ export default function Home() {
           className="w-full border-t border-border/80 pt-12 md:pt-14"
           {...fadeUp}
         >
-          <h2 className="mb-8 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:text-left md:text-3xl">
-            Technical expertise
-          </h2>
+          <ScrambleHeader
+            text="Technical expertise"
+            className="mb-8 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:text-left md:text-3xl"
+          />
           <div className="mb-6 flex flex-wrap justify-center gap-2 md:justify-start">
             {expertiseCategories.map((cat, index) => {
               const Icon = cat.icon;
@@ -416,23 +410,38 @@ export default function Home() {
               );
             })}
           </div>
-          {selectedCategory ? (
-            <div className="flex flex-wrap justify-center gap-2 md:justify-start">
-              {selectedCategory.items.map((name) => {
-                const Icon = skillIcons[name];
-                return (
-                  <Badge
-                    key={name}
-                    variant="muted"
-                    className="flex items-center gap-1.5 px-2.5 py-1 font-normal"
-                  >
-                    {Icon ? <Icon size={14} className="shrink-0" /> : null}
-                    {name}
-                  </Badge>
-                );
-              })}
-            </div>
-          ) : null}
+          <AnimatePresence mode="popLayout">
+            {selectedCategory ? (
+              <motion.div
+                key={selectedCategory.group}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-wrap justify-center gap-2 md:justify-start"
+              >
+                {selectedCategory.items.map((name, idx) => {
+                  const Icon = skillIcons[name];
+                  return (
+                    <motion.div
+                      key={name}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: idx * 0.03, duration: 0.2 }}
+                    >
+                      <Badge
+                        variant="muted"
+                        className="flex items-center gap-1.5 px-2.5 py-1 font-normal"
+                      >
+                        {Icon ? <Icon size={14} className="shrink-0" /> : null}
+                        {name}
+                      </Badge>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
         </motion.section>
       </div>
 
@@ -443,9 +452,10 @@ export default function Home() {
         className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-4 pt-16 md:pt-20"
         {...fadeUp}
       >
-        <h2 className="mb-10 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:mb-8 md:pl-[calc(1rem+0.25rem)] md:text-left md:text-3xl">
-          Experience
-        </h2>
+        <ScrambleHeader
+          text="Experience"
+          className="mb-10 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:mb-8 md:pl-[calc(1rem+0.25rem)] md:text-left md:text-3xl"
+        />
         <div className="flex gap-5 md:gap-6">
           {/* Scroll-progress rail (desktop) */}
           <div
@@ -460,6 +470,7 @@ export default function Home() {
           <div className="flex min-w-0 flex-1 flex-col gap-6 md:gap-8">
           {experience.map((job, index) => (
             <motion.div key={`${job.company}-${job.title}-${index}`} {...staggerDelay(index)} className="w-full">
+              <motion.div whileHover={{ x: 6 }} transition={{ type: "spring", stiffness: 400, damping: 25 }}>
               <Card className="border-border/80 text-left shadow-sm transition-shadow hover:shadow-md">
                 <CardHeader className="space-y-3 pb-2">
                   <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
@@ -498,6 +509,7 @@ export default function Home() {
                   </ul>
                 </CardContent>
               </Card>
+              </motion.div>
             </motion.div>
           ))}
           </div>
@@ -510,9 +522,10 @@ export default function Home() {
         className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-4 pt-16 md:pt-20"
         {...fadeUp}
       >
-        <h2 className="mb-8 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:text-left md:text-3xl">
-          Projects
-        </h2>
+        <ScrambleHeader
+          text="Projects"
+          className="mb-8 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:text-left md:text-3xl"
+        />
 
         {projectsLoading ? (
           <div
@@ -534,6 +547,7 @@ export default function Home() {
             </div>
 
             <TabsContent value="featured" className="mt-0">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: "easeOut" }}>
               {featuredProjects.length === 0 ? (
                 <p className="text-center text-sm text-muted-foreground md:text-left">
                   No featured projects found.
@@ -555,9 +569,11 @@ export default function Home() {
                   })}
                 </div>
               )}
+              </motion.div>
             </TabsContent>
 
             <TabsContent value="all" className="mt-0">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: "easeOut" }}>
               {allProjects.length === 0 ? (
                 <p className="text-center text-sm text-muted-foreground md:text-left">
                   No projects found.
@@ -579,6 +595,7 @@ export default function Home() {
                   })}
                 </div>
               )}
+              </motion.div>
             </TabsContent>
           </Tabs>
         )}
@@ -590,9 +607,10 @@ export default function Home() {
         className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-16 pt-16 md:pt-20"
         {...fadeUp}
       >
-        <h2 className="mb-10 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:text-left md:text-3xl">
-          Education
-        </h2>
+        <ScrambleHeader
+          text="Education"
+          className="mb-10 text-center text-2xl font-semibold tracking-[0.02em] text-foreground md:text-left md:text-3xl"
+        />
 
         <div className="space-y-12">
           {/* Degrees */}
@@ -607,7 +625,9 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {degrees.map((edu, index) => (
                 <motion.div key={`degree-${index}`} {...staggerDelay(index)} className="h-full">
-                  <a
+                  <motion.a
+                    whileHover={{ y: -4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
                     href={edu.link}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -644,7 +664,7 @@ export default function Home() {
                         </p>
                       </CardContent>
                     </Card>
-                  </a>
+                  </motion.a>
                 </motion.div>
               ))}
             </div>
@@ -662,7 +682,9 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
               {certificates.map((edu, index) => (
                 <motion.div key={`cert-${index}`} {...staggerDelay(index)} className="h-full">
-                  <a
+                  <motion.a
+                    whileHover={{ y: -4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
                     href={edu.link}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -699,7 +721,7 @@ export default function Home() {
                         </p>
                       </CardContent>
                     </Card>
-                  </a>
+                  </motion.a>
                 </motion.div>
               ))}
             </div>

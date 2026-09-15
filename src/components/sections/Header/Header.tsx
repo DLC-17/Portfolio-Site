@@ -3,17 +3,17 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { name: "About", link: "/#about", id: "about" },
+  { name: "Contact", link: "/#contact", id: "contact" },
   { name: "Expertise", link: "/#expertise", id: "expertise" },
   { name: "Experience", link: "/#experience", id: "experience" },
   { name: "Projects", link: "/#projects", id: "projects" },
   { name: "Education", link: "/#education", id: "education" },
-  { name: "Contact", link: "/#contact", id: "contact" },
 ];
 
 export default function Header() {
@@ -53,7 +53,7 @@ export default function Header() {
 
   const linkClass = (active: boolean) =>
     cn(
-      "rounded-md px-2.5 py-1.5 text-xs font-medium tracking-wide transition-colors sm:text-sm",
+      "relative rounded-md px-2.5 py-1.5 text-xs font-medium tracking-wide transition-colors sm:text-sm",
       active
         ? "text-primary font-semibold"
         : "text-muted-foreground hover:text-foreground",
@@ -74,6 +74,13 @@ export default function Header() {
             const active = isItemActive(item);
             return (
               <Link key={item.name} href={item.link} className={linkClass(active)}>
+                {active && (
+                  <motion.span
+                    layoutId="header-active-section"
+                    className="absolute inset-0 -z-10 rounded-md bg-muted"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
                 {item.name}
               </Link>
             );
@@ -93,25 +100,33 @@ export default function Header() {
           </button>
         </div>
 
-        {isMobileMenuOpen ? (
-          <div className="absolute top-full left-0 right-0 border-b border-border/80 bg-background shadow-sm md:hidden">
-            <nav className="flex flex-col gap-0 p-2">
-              {navItems.map((item) => {
-                const active = isItemActive(item);
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.link}
-                    className={cn(linkClass(active), "px-4 py-3")}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-        ) : null}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-full left-0 right-0 overflow-hidden border-b border-border/80 bg-background shadow-sm md:hidden"
+            >
+              <nav className="flex flex-col gap-0 p-2">
+                {navItems.map((item) => {
+                  const active = isItemActive(item);
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.link}
+                      className={cn(linkClass(active), "px-4 py-3")}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );

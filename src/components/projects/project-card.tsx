@@ -103,21 +103,26 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   return (
     <>
       <motion.div {...staggered} className="h-full w-full">
-        <Card
-          role="button"
-          tabIndex={0}
-          aria-haspopup="dialog"
-          aria-expanded={isOpen}
-          aria-label={`View project details for ${project.title}`}
-          onClick={() => setIsOpen(true)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setIsOpen(true);
-            }
-          }}
-          className="group relative flex h-full cursor-pointer flex-col overflow-hidden border-border/80 bg-card transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-xl dark:hover:border-primary/40 dark:hover:shadow-primary/5 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+        <motion.div
+          whileHover={{ y: -6 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          className="h-full w-full"
         >
+          <Card
+            role="button"
+            tabIndex={0}
+            aria-haspopup="dialog"
+            aria-expanded={isOpen}
+            aria-label={`View project details for ${project.title}`}
+            onClick={() => setIsOpen(true)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsOpen(true);
+              }
+            }}
+            className="group relative flex h-full cursor-pointer flex-col overflow-hidden border-border/80 bg-card transition-colors duration-300 ease-out hover:border-primary/40 hover:shadow-xl dark:hover:border-primary/40 dark:hover:shadow-primary/5 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+          >
           {thumbnailImageUrl ? (
             <div className="relative aspect-video w-full overflow-hidden border-b border-border/80 bg-muted/30">
               <Image
@@ -203,6 +208,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
             </div>
           </CardFooter>
         </Card>
+        </motion.div>
       </motion.div>
 
       {/* Expanded Modal Dialog */}

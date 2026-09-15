@@ -1,5 +1,5 @@
 import type { StructureResolver } from "sanity/structure";
-import { DocumentPdfIcon, CaseIcon, StarIcon, BookIcon, DocumentsIcon } from "@sanity/icons";
+import { DocumentPdfIcon, CaseIcon, StarIcon, DocumentsIcon } from "@sanity/icons";
 
 export const deskStructure: StructureResolver = (S) =>
   S.list()
@@ -42,12 +42,15 @@ export const deskStructure: StructureResolver = (S) =>
                 ),
             ])
         ),
+        
+      S.divider(),
 
-      // Blog Posts
+      // Blog Section
       S.listItem()
         .title("Blog Posts")
-        .icon(BookIcon)
+        .icon(DocumentsIcon)
         .child(
-          S.documentTypeList("post").title("Blog Posts")
+          S.documentTypeList("post").title("All Posts")
         ),
     ]);
+

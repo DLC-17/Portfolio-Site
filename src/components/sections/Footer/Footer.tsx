@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { ArrowUp, FileText } from "lucide-react";
-import { fetchResume, type ResumeData } from "@/sanity/sanity-utils";
+import { fetchResume, DEFAULT_RESUME_FALLBACK_URL, type ResumeData } from "@/sanity/sanity-utils";
 
 export default function Footer() {
   const [resume, setResume] = useState<ResumeData | null>(null);
@@ -16,7 +16,8 @@ export default function Footer() {
       .catch(() => {});
   }, []);
 
-  const resumeUrl = resume?.fileUrl || resume?.externalUrl;
+  const resumeUrl = resume?.fileUrl || resume?.externalUrl || DEFAULT_RESUME_FALLBACK_URL;
+
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

@@ -2,8 +2,10 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { deskStructure } from "./Sanity/desk-structure";
 import project from "./Sanity/schemas/project-schemas";
-import postSchema from "./Sanity/schemas/post-schema";
 import resume from "./Sanity/schemas/resume-schema";
+import post from "./Sanity/schemas/post-schema";
+
+import { codeInput } from "@sanity/code-input";
 
 const singletonTypes = new Set(["resume"]);
 
@@ -22,10 +24,11 @@ const config = defineConfig({
     structureTool({
       structure: deskStructure,
     }),
+    codeInput(),
   ],
 
   schema: {
-    types: [project, postSchema, resume],
+    types: [project, resume, post],
     templates: (templates) =>
       templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
   },

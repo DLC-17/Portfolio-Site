@@ -60,6 +60,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { CommandMenu } from "@/components/ui/command-menu";
+import { BackgroundParticles } from "@/components/ui/background-particles";
+
 export default function RootLayout({
   children,
 }: {
@@ -80,8 +83,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <BackgroundParticles />
+          <CommandMenu />
           <Header />
-          <main className="flex-grow">{children}</main>
+          <div className="flex-grow">{children}</div>
           <Footer />
           <ChatWidget />
         </ThemeProvider>

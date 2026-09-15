@@ -1,16 +1,15 @@
-// schemas/post.ts
 import type { Rule } from "sanity";
 
 export default {
   name: "post",
-  title: "Blog Post",
+  title: "Post",
   type: "document",
   fields: [
     {
       name: "title",
       title: "Title",
       type: "string",
-      validation: (rule: Rule) => rule.required().min(2).max(120),
+      validation: (rule: Rule) => rule.required().min(2).max(100),
     },
     {
       name: "slug",
@@ -23,37 +22,39 @@ export default {
       name: "publishedAt",
       title: "Published At",
       type: "datetime",
-    },
-    {
-      name: "author",
-      title: "Author",
-      type: "string",
-    },
-    {
-      name: "mainImage",
-      title: "Main Image",
-      type: "image",
-      options: { hotspot: true },
+      initialValue: () => new Date().toISOString(),
     },
     {
       name: "excerpt",
       title: "Excerpt",
+      description: "A short summary of the post.",
       type: "text",
-      rows: 2,
+      rows: 3,
       validation: (rule: Rule) => rule.max(300),
     },
     {
       name: "body",
-      title: "Body Content",
+      title: "Body",
       type: "array",
-      of: [{ type: "block" }],
-    },
-    {
-      name: "categories",
-      title: "Categories",
-      type: "array",
-      of: [{ type: "string" }],
+      of: [
+        { type: "block" },
+        { type: "image", options: { hotspot: true } },
+        { 
+          type: "code",
+          options: {
+            language: "typescript",
+            languageAlternatives: [
+              { title: "TypeScript", value: "typescript" },
+              { title: "JavaScript", value: "javascript" },
+              { title: "Python", value: "python" },
+              { title: "BASH", value: "bash" },
+              { title: "JSON", value: "json" },
+              { title: "SQL", value: "sql" }
+            ],
+            withFilename: true
+          }
+        },
+      ],
     },
   ],
 };
-

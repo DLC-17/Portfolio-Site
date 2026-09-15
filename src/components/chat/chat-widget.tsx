@@ -170,6 +170,12 @@ export function ChatWidget() {
     }
   }, [isOpen, messages]);
 
+  useEffect(() => {
+    const handleOpenChat = () => setIsOpen(true);
+    window.addEventListener('open-chat', handleOpenChat);
+    return () => window.removeEventListener('open-chat', handleOpenChat);
+  }, []);
+
   const handleSend = async (userText: string) => {
     const trimmed = userText.trim();
     if (!trimmed || isLoading) return;
