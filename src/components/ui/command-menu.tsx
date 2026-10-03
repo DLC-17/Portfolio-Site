@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Monitor, FileText, Mail, Code2, User, Wrench, Briefcase, GraduationCap, Bot } from "lucide-react";
+import { Moon, Sun, Monitor, FileText, Mail, Code2, User, Briefcase, GraduationCap, Bot, Sparkles, Eye } from "lucide-react";
+import { useSeasonal } from "@/components/ui/seasonal-provider";
 
 export function CommandMenu() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { setTheme } = useTheme();
+  const { enabled, toggleEnabled, backgroundOnly, toggleBackgroundOnly } = useSeasonal();
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -49,16 +51,17 @@ export function CommandMenu() {
               <Bot className="h-4 w-4" /> Ask David AI
             </Command.Item>
             <Command.Item 
-              onSelect={() => { router.push("/#about"); setOpen(false); }}
+              onSelect={() => { 
+                if (window.location.pathname === "/") {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  router.push("/#about");
+                }
+                setOpen(false); 
+              }}
               className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-foreground hover:bg-muted aria-selected:bg-muted"
             >
               <User className="h-4 w-4" /> About
-            </Command.Item>
-            <Command.Item 
-              onSelect={() => { router.push("/#expertise"); setOpen(false); }}
-              className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-foreground hover:bg-muted aria-selected:bg-muted"
-            >
-              <Wrench className="h-4 w-4" /> Expertise
             </Command.Item>
             <Command.Item 
               onSelect={() => { router.push("/#experience"); setOpen(false); }}
@@ -85,7 +88,14 @@ export function CommandMenu() {
               <FileText className="h-4 w-4" /> Blog
             </Command.Item>
             <Command.Item 
-              onSelect={() => { router.push("/#contact"); setOpen(false); }}
+              onSelect={() => { 
+                if (window.location.pathname === "/") {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                  router.push("/#contact");
+                }
+                setOpen(false); 
+              }}
               className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-foreground hover:bg-muted aria-selected:bg-muted"
             >
               <Mail className="h-4 w-4" /> Contact
@@ -110,6 +120,26 @@ export function CommandMenu() {
               className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-foreground hover:bg-muted aria-selected:bg-muted"
             >
               <Monitor className="h-4 w-4" /> System Theme
+            </Command.Item>
+            <Command.Item 
+              onSelect={() => { toggleEnabled(); setOpen(false); }}
+              className="flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm text-foreground hover:bg-muted aria-selected:bg-muted"
+            >
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <span>Toggle Seasonal Effects</span>
+              </div>
+              <span className="text-xs text-muted-foreground">{enabled ? "On" : "Off"}</span>
+            </Command.Item>
+            <Command.Item 
+              onSelect={() => { toggleBackgroundOnly(); setOpen(false); }}
+              className="flex cursor-pointer items-center justify-between rounded-md px-2 py-2 text-sm text-foreground hover:bg-muted aria-selected:bg-muted"
+            >
+              <div className="flex items-center gap-2">
+                <Eye className="h-4 w-4 text-primary" />
+                <span>View Background Only (Hide UI)</span>
+              </div>
+              <span className="text-xs text-muted-foreground">{backgroundOnly ? "Active" : "Off"}</span>
             </Command.Item>
           </Command.Group>
         </Command.List>

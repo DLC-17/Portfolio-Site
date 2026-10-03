@@ -119,6 +119,431 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.553 0.013 58.071);
 }
+
+/* ==========================================================================
+   Seasonal & Holiday Theme Overrides (Accent tokens strictly)
+   ========================================================================== */
+
+/* Spring */
+html[data-season="spring"] {
+  --primary: #059669;
+  --primary-foreground: #ffffff;
+  --opposing: #DB2777;
+  --opposing-foreground: #ffffff;
+  --border: #059669;
+  --input: #059669;
+  --ring: #059669;
+}
+html.dark[data-season="spring"] {
+  --primary: #34D399;
+  --primary-foreground: #022c22;
+  --opposing: #F472B6;
+  --opposing-foreground: #09090b;
+  --border: #34D399;
+  --input: #34D399;
+  --ring: #34D399;
+}
+
+/* Summer */
+html[data-season="summer"] {
+  --primary: #D97706;
+  --primary-foreground: #ffffff;
+  --opposing: #0284C7;
+  --opposing-foreground: #ffffff;
+  --border: #D97706;
+  --input: #D97706;
+  --ring: #D97706;
+}
+html.dark[data-season="summer"] {
+  --primary: #F59E0B;
+  --primary-foreground: #09090b;
+  --opposing: #38BDF8;
+  --opposing-foreground: #09090b;
+  --border: #F59E0B;
+  --input: #F59E0B;
+  --ring: #F59E0B;
+}
+
+/* Autumn */
+html[data-season="autumn"] {
+  --primary: #C2410C;
+  --primary-foreground: #ffffff;
+  --opposing: #78350F;
+  --opposing-foreground: #ffffff;
+  --border: #C2410C;
+  --input: #C2410C;
+  --ring: #C2410C;
+}
+html.dark[data-season="autumn"] {
+  --primary: #EA580C;
+  --primary-foreground: #ffffff;
+  --opposing: #FDBA74;
+  --opposing-foreground: #09090b;
+  --border: #EA580C;
+  --input: #EA580C;
+  --ring: #EA580C;
+}
+
+/* Winter */
+html[data-season="winter"] {
+  --primary: #0284C7;
+  --primary-foreground: #ffffff;
+  --opposing: #6366F1;
+  --opposing-foreground: #ffffff;
+  --border: #0284C7;
+  --input: #0284C7;
+  --ring: #0284C7;
+}
+html.dark[data-season="winter"] {
+  --primary: #38BDF8;
+  --primary-foreground: #09090b;
+  --opposing: #818CF8;
+  --opposing-foreground: #09090b;
+  --border: #38BDF8;
+  --input: #38BDF8;
+  --ring: #38BDF8;
+}
+
+/* Halloween */
+html[data-season="halloween"] {
+  --primary: #EA580C;
+  --primary-foreground: #ffffff;
+  --opposing: #6B21A8;
+  --opposing-foreground: #ffffff;
+  --border: #EA580C;
+  --input: #EA580C;
+  --ring: #EA580C;
+}
+html.dark[data-season="halloween"] {
+  --primary: #F97316;
+  --primary-foreground: #09090b;
+  --opposing: #84CC16;
+  --opposing-foreground: #09090b;
+  --border: #F97316;
+  --input: #F97316;
+  --ring: #F97316;
+}
+
+/* Christmas / Winter Holidays */
+html[data-season="christmas"] {
+  --primary: #DC2626;
+  --primary-foreground: #ffffff;
+  --opposing: #15803D;
+  --opposing-foreground: #ffffff;
+  --border: #DC2626;
+  --input: #DC2626;
+  --ring: #DC2626;
+}
+html.dark[data-season="christmas"] {
+  --primary: #EF4444;
+  --primary-foreground: #ffffff;
+  --opposing: #22C55E;
+  --opposing-foreground: #09090b;
+  --border: #EF4444;
+  --input: #EF4444;
+  --ring: #EF4444;
+}
+
+/* New Year's */
+html[data-season="new-year"] {
+  --primary: #CA8A04;
+  --primary-foreground: #ffffff;
+  --opposing: #475569;
+  --opposing-foreground: #ffffff;
+  --border: #CA8A04;
+  --input: #CA8A04;
+  --ring: #CA8A04;
+}
+html.dark[data-season="new-year"] {
+  --primary: #FACC15;
+  --primary-foreground: #09090b;
+  --opposing: #F8FAFC;
+  --opposing-foreground: #09090b;
+  --border: #FACC15;
+  --input: #FACC15;
+  --ring: #FACC15;
+}
+
+/* Black History Month */
+html[data-season="black-history-month"] {
+  --primary: #DC2626;
+  --primary-foreground: #ffffff;
+  --opposing: #15803D;
+  --opposing-foreground: #ffffff;
+  --border: #CA8A04;
+  --input: #DC2626;
+  --ring: #CA8A04;
+}
+html.dark[data-season="black-history-month"] {
+  --primary: #EF4444;
+  --primary-foreground: #ffffff;
+  --opposing: #22C55E;
+  --opposing-foreground: #09090b;
+  --border: #EAB308;
+  --input: #EF4444;
+  --ring: #EAB308;
+}
+
+/* Pi Day */
+html[data-season="pi-day"] {
+  --primary: #4F46E5;
+  --primary-foreground: #ffffff;
+  --opposing: #0284C7;
+  --opposing-foreground: #ffffff;
+  --border: #4F46E5;
+  --input: #4F46E5;
+  --ring: #4F46E5;
+}
+html.dark[data-season="pi-day"] {
+  --primary: #818CF8;
+  --primary-foreground: #09090b;
+  --opposing: #38BDF8;
+  --opposing-foreground: #09090b;
+  --border: #818CF8;
+  --input: #818CF8;
+  --ring: #818CF8;
+}
+
+/* St. Patrick's Day */
+html[data-season="st-patricks"] {
+  --primary: #15803D;
+  --primary-foreground: #ffffff;
+  --opposing: #CA8A04;
+  --opposing-foreground: #ffffff;
+  --border: #15803D;
+  --input: #15803D;
+  --ring: #15803D;
+}
+html.dark[data-season="st-patricks"] {
+  --primary: #22C55E;
+  --primary-foreground: #09090b;
+  --opposing: #FACC15;
+  --opposing-foreground: #09090b;
+  --border: #22C55E;
+  --input: #22C55E;
+  --ring: #22C55E;
+}
+
+/* Cherry Blossoms (Hanami) */
+html[data-season="cherry-blossom"] {
+  --primary: #DB2777;
+  --primary-foreground: #ffffff;
+  --opposing: #059669;
+  --opposing-foreground: #ffffff;
+  --border: #DB2777;
+  --input: #DB2777;
+  --ring: #DB2777;
+}
+html.dark[data-season="cherry-blossom"] {
+  --primary: #F472B6;
+  --primary-foreground: #09090b;
+  --opposing: #34D399;
+  --opposing-foreground: #022c22;
+  --border: #F472B6;
+  --input: #F472B6;
+  --ring: #F472B6;
+}
+
+/* Earth Day */
+html[data-season="earth-day"] {
+  --primary: #0D9488;
+  --primary-foreground: #ffffff;
+  --opposing: #65A30D;
+  --opposing-foreground: #ffffff;
+  --border: #0D9488;
+  --input: #0D9488;
+  --ring: #0D9488;
+}
+html.dark[data-season="earth-day"] {
+  --primary: #14B8A6;
+  --primary-foreground: #042f2e;
+  --opposing: #A3E635;
+  --opposing-foreground: #09090b;
+  --border: #14B8A6;
+  --input: #14B8A6;
+  --ring: #14B8A6;
+}
+
+/* Summer Solstice */
+html[data-season="summer-solstice"] {
+  --primary: #D97706;
+  --primary-foreground: #ffffff;
+  --opposing: #EA580C;
+  --opposing-foreground: #ffffff;
+  --border: #D97706;
+  --input: #D97706;
+  --ring: #D97706;
+}
+html.dark[data-season="summer-solstice"] {
+  --primary: #FBBF24;
+  --primary-foreground: #09090b;
+  --opposing: #FB923C;
+  --opposing-foreground: #09090b;
+  --border: #FBBF24;
+  --input: #FBBF24;
+  --ring: #FBBF24;
+}
+
+/* Programmers' Day */
+html[data-season="programmers-day"] {
+  --primary: #059669;
+  --primary-foreground: #ffffff;
+  --opposing: #0284C7;
+  --opposing-foreground: #ffffff;
+  --border: #059669;
+  --input: #059669;
+  --ring: #059669;
+}
+html.dark[data-season="programmers-day"] {
+  --primary: #10B981;
+  --primary-foreground: #022c22;
+  --opposing: #06B6D4;
+  --opposing-foreground: #09090b;
+  --border: #10B981;
+  --input: #10B981;
+  --ring: #10B981;
+}
+
+/* Thanksgiving */
+html[data-season="thanksgiving"] {
+  --primary: #B45309;
+  --primary-foreground: #ffffff;
+  --opposing: #991B1B;
+  --opposing-foreground: #ffffff;
+  --border: #B45309;
+  --input: #B45309;
+  --ring: #B45309;
+}
+html.dark[data-season="thanksgiving"] {
+  --primary: #D97706;
+  --primary-foreground: #09090b;
+  --opposing: #DC2626;
+  --opposing-foreground: #ffffff;
+  --border: #D97706;
+  --input: #D97706;
+  --ring: #D97706;
+}
+
+/* Winter Solstice */
+html[data-season="winter-solstice"] {
+  --primary: #1E40AF;
+  --primary-foreground: #ffffff;
+  --opposing: #7DD3FC;
+  --opposing-foreground: #09090b;
+  --border: #1E40AF;
+  --input: #1E40AF;
+  --ring: #1E40AF;
+}
+html.dark[data-season="winter-solstice"] {
+  --primary: #38BDF8;
+  --primary-foreground: #09090b;
+  --opposing: #A78BFA;
+  --opposing-foreground: #09090b;
+  --border: #38BDF8;
+  --input: #38BDF8;
+  --ring: #38BDF8;
+}
+
+/* Lunar New Year */
+html[data-season="lunar-new-year"] {
+  --primary: #DC2626;
+  --primary-foreground: #ffffff;
+  --opposing: #CA8A04;
+  --opposing-foreground: #ffffff;
+  --border: #DC2626;
+  --input: #DC2626;
+  --ring: #DC2626;
+}
+html.dark[data-season="lunar-new-year"] {
+  --primary: #EF4444;
+  --primary-foreground: #ffffff;
+  --opposing: #FACC15;
+  --opposing-foreground: #09090b;
+  --border: #EF4444;
+  --input: #EF4444;
+  --ring: #EF4444;
+}
+
+/* Cinco de Mayo */
+html[data-season="cinco-de-mayo"] {
+  --primary: #16A34A;
+  --primary-foreground: #ffffff;
+  --opposing: #DC2626;
+  --opposing-foreground: #ffffff;
+  --border: #16A34A;
+  --input: #16A34A;
+  --ring: #16A34A;
+}
+html.dark[data-season="cinco-de-mayo"] {
+  --primary: #22C55E;
+  --primary-foreground: #052e16;
+  --opposing: #EF4444;
+  --opposing-foreground: #ffffff;
+  --border: #22C55E;
+  --input: #22C55E;
+  --ring: #22C55E;
+}
+
+/* Juneteenth */
+html[data-season="juneteenth"] {
+  --primary: #DC2626;
+  --primary-foreground: #ffffff;
+  --opposing: #15803D;
+  --opposing-foreground: #ffffff;
+  --border: #CA8A04;
+  --input: #DC2626;
+  --ring: #CA8A04;
+}
+html.dark[data-season="juneteenth"] {
+  --primary: #EF4444;
+  --primary-foreground: #ffffff;
+  --opposing: #22C55E;
+  --opposing-foreground: #09090b;
+  --border: #FACC15;
+  --input: #EF4444;
+  --ring: #FACC15;
+}
+
+/* Diwali */
+html[data-season="diwali"] {
+  --primary: #D97706;
+  --primary-foreground: #ffffff;
+  --opposing: #9333EA;
+  --opposing-foreground: #ffffff;
+  --border: #D97706;
+  --input: #D97706;
+  --ring: #D97706;
+}
+html.dark[data-season="diwali"] {
+  --primary: #F59E0B;
+  --primary-foreground: #09090b;
+  --opposing: #A855F7;
+  --opposing-foreground: #ffffff;
+  --border: #F59E0B;
+  --input: #F59E0B;
+  --ring: #F59E0B;
+}
+
+/* Linux Anniversary */
+html[data-season="linux-anniversary"] {
+  --primary: #0284C7;
+  --primary-foreground: #ffffff;
+  --opposing: #CA8A04;
+  --opposing-foreground: #ffffff;
+  --border: #0284C7;
+  --input: #0284C7;
+  --ring: #0284C7;
+}
+html.dark[data-season="linux-anniversary"] {
+  --primary: #38BDF8;
+  --primary-foreground: #09090b;
+  --opposing: #FACC15;
+  --opposing-foreground: #09090b;
+  --border: #38BDF8;
+  --input: #38BDF8;
+  --ring: #38BDF8;
+}
+
 @layer base {
   :root {
     --sidebar-background: 0 0% 98%;

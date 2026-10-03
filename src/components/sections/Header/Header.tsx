@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Contact", link: "/#contact", id: "contact" },
-  { name: "Expertise", link: "/#expertise", id: "expertise" },
   { name: "Experience", link: "/#experience", id: "experience" },
   { name: "Projects", link: "/#projects", id: "projects" },
   { name: "Education", link: "/#education", id: "education" },
@@ -18,30 +17,44 @@ const navItems = [
 
 export default function Header() {
   const pathname = usePathname();
-  const [activeSection, setActiveSection] = useState<string>("about");
+  const [activeSection, setActiveSection] = useState<string>("contact");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (pathname !== "/") return;
 
+    const handleScroll = () => {
+      if (window.scrollY < 120) {
+        setActiveSection("contact");
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+            if (entry.target.id === "about" || entry.target.id === "contact") {
+              setActiveSection("contact");
+            } else {
+              setActiveSection(entry.target.id);
+            }
           }
         });
       },
       { rootMargin: "-30% 0px -40% 0px" }
     );
 
-    const sectionIds = ["about", "expertise", "experience", "projects", "education", "contact"];
+    const sectionIds = ["about", "experience", "projects", "education", "contact"];
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, [pathname]);
 
   const isItemActive = (item: (typeof navItems)[number]) => {
@@ -49,6 +62,51 @@ export default function Header() {
       return activeSection === item.id;
     }
     return false;
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      if (hash === "contact" || hash === "about" || hash === "top") {
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          setActiveSection("contact");
+        }, 100);
+        return;
+      }
+      const el = document.getElementById(hash);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          setActiveSection(hash);
+        }, 150);
+      }
+    }
+  }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const hashIndex = href.indexOf("#");
+    if (hashIndex !== -1) {
+      const hash = href.substring(hashIndex + 1);
+      if (hash === "contact" || hash === "about" || hash === "top") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.history.pushState(null, "", pathname === "/" ? "#contact" : "/#contact");
+        setActiveSection("contact");
+        setIsMobileMenuOpen(false);
+        return;
+      }
+      const el = document.getElementById(hash);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.pushState(null, "", `#${hash}`);
+        setActiveSection(hash);
+        setIsMobileMenuOpen(false);
+        return;
+      }
+    }
+    setIsMobileMenuOpen(false);
   };
 
   const linkClass = (active: boolean) =>
@@ -64,6 +122,14 @@ export default function Header() {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
         <Link
           href="/"
+          onClick={(e) => {
+            if (pathname === "/") {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.history.pushState(null, "", "/");
+              setActiveSection("contact");
+            }
+          }}
           className="text-sm font-semibold tracking-[0.12em] text-foreground transition-opacity hover:opacity-80"
         >
           DLC
@@ -73,7 +139,12 @@ export default function Header() {
           {navItems.map((item) => {
             const active = isItemActive(item);
             return (
-              <Link key={item.name} href={item.link} className={linkClass(active)}>
+              <Link
+                key={item.name}
+                href={item.link}
+                onClick={(e) => handleNavClick(e, item.link)}
+                className={linkClass(active)}
+              >
                 {active && (
                   <motion.span
                     layoutId="header-active-section"
@@ -117,7 +188,7 @@ export default function Header() {
                       key={item.name}
                       href={item.link}
                       className={cn(linkClass(active), "px-4 py-3")}
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={(e) => handleNavClick(e, item.link)}
                     >
                       {item.name}
                     </Link>

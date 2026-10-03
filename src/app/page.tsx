@@ -297,9 +297,9 @@ export default function Home() {
 
   return (
     <main className="flex w-full flex-col items-center space-y-20 px-6 text-center md:space-y-24">
-      {/* About Section */}
-      <div className="mx-auto flex w-full max-w-5xl flex-col px-4 pb-10 pt-28 md:pt-32">
-        <motion.section id="about" className="mb-10 w-full md:mb-14" {...heroEnter}>
+      {/* About & Contact Hero Section */}
+      <div id="contact" className="mx-auto flex w-full max-w-5xl flex-col px-4 pb-10 pt-28 md:pt-32 scroll-mt-24">
+        <motion.section id="about" className="mb-10 w-full md:mb-14 scroll-mt-24" {...heroEnter}>
           <h1 className="text-balance text-center font-semibold tracking-[0.02em] text-foreground md:text-left text-4xl md:text-5xl">
             David Coleman
           </h1>
@@ -339,7 +339,7 @@ export default function Home() {
             </p>
           ) : null}
 
-          <section id="contact" className="mt-10 w-full pb-2 md:text-left">
+          <section id="connect" className="mt-10 w-full pb-2 md:text-left">
             <p className="mb-4 text-sm text-muted-foreground">Connect with me</p>
             <div className="flex flex-wrap items-center justify-center gap-6 md:justify-start">
               <a
@@ -380,7 +380,7 @@ export default function Home() {
         {/* Technical Expertise - selectable category icons with labels, skills horizontal below; click again to toggle off */}
         <motion.section
           id="expertise"
-          className="w-full border-t border-border/80 pt-12 md:pt-14"
+          className="w-full border-t border-border/80 pt-12 md:pt-14 scroll-mt-24"
           {...fadeUp}
         >
           <ScrambleHeader
@@ -414,27 +414,27 @@ export default function Home() {
             {selectedCategory ? (
               <motion.div
                 key={selectedCategory.group}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.2 }}
-                className="flex flex-wrap justify-center gap-2 md:justify-start"
+                className="flex flex-wrap justify-center gap-2.5 rounded-xl border border-border/60 bg-card/60 p-4 shadow-xs backdrop-blur-xs md:justify-start md:p-5"
               >
                 {selectedCategory.items.map((name, idx) => {
                   const Icon = skillIcons[name];
                   return (
                     <motion.div
                       key={name}
-                      initial={{ opacity: 0, scale: 0.8 }}
+                      initial={{ opacity: 0, scale: 0.85 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: idx * 0.03, duration: 0.2 }}
+                      transition={{ delay: idx * 0.025, duration: 0.2 }}
                     >
                       <Badge
                         variant="muted"
-                        className="flex items-center gap-1.5 px-2.5 py-1 font-normal"
+                        className="flex items-center gap-2.5 rounded-lg border border-border/80 bg-background/80 px-3.5 py-2 text-sm font-medium text-foreground shadow-xs transition-all duration-200 hover:border-primary/60 hover:bg-muted/70 hover:scale-105"
                       >
-                        {Icon ? <Icon size={14} className="shrink-0" /> : null}
-                        {name}
+                        {Icon ? <Icon size={18} className="shrink-0 text-primary" /> : null}
+                        <span className="tracking-tight">{name}</span>
                       </Badge>
                     </motion.div>
                   );
@@ -449,7 +449,7 @@ export default function Home() {
       <motion.section
         ref={experienceSectionRef}
         id="experience"
-        className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-4 pt-16 md:pt-20"
+        className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-4 pt-16 md:pt-20 scroll-mt-24"
         {...fadeUp}
       >
         <ScrambleHeader
@@ -519,7 +519,7 @@ export default function Home() {
       {/* Projects Section - located beneath Experience */}
       <motion.section
         id="projects"
-        className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-4 pt-16 md:pt-20"
+        className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-4 pt-16 md:pt-20 scroll-mt-24"
         {...fadeUp}
       >
         <ScrambleHeader
@@ -604,7 +604,7 @@ export default function Home() {
       {/* Education Section - split into Degrees and Certificates */}
       <motion.section
         id="education"
-        className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-16 pt-16 md:pt-20"
+        className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 pb-16 pt-16 md:pt-20 scroll-mt-24"
         {...fadeUp}
       >
         <ScrambleHeader

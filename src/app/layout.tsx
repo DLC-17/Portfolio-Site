@@ -62,6 +62,8 @@ export const metadata: Metadata = {
 
 import { CommandMenu } from "@/components/ui/command-menu";
 import { BackgroundParticles } from "@/components/ui/background-particles";
+import { SeasonalProvider } from "@/components/ui/seasonal-provider";
+import { ContentShell } from "@/components/ui/content-shell";
 
 export default function RootLayout({
   children,
@@ -83,12 +85,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <BackgroundParticles />
-          <CommandMenu />
-          <Header />
-          <div className="flex-grow">{children}</div>
-          <Footer />
-          <ChatWidget />
+          <SeasonalProvider>
+            <BackgroundParticles />
+            <CommandMenu />
+            <ContentShell>
+              <Header />
+              <div className="flex-grow">{children}</div>
+              <Footer />
+              <ChatWidget />
+            </ContentShell>
+          </SeasonalProvider>
         </ThemeProvider>
       </body>
     </html>
