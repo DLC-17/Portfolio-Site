@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import { SiKofi } from "react-icons/si";
 import { ArrowUp, FileText } from "lucide-react";
 import { fetchResume, DEFAULT_RESUME_FALLBACK_URL, type ResumeData } from "@/sanity/sanity-utils";
 
@@ -63,6 +64,16 @@ export default function Footer() {
             aria-label="Email"
           >
             <FaEnvelope size={18} />
+          </a>
+          <a
+            href="https://ko-fi.com/dlc17"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground transition-colors hover:text-[#FF5E5B]"
+            aria-label="Support on Ko-fi"
+            title="Support on Ko-fi"
+          >
+            <SiKofi size={18} />
           </a>
 
           {resumeUrl ? (
