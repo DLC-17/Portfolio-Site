@@ -32,6 +32,7 @@ export const deskStructure: StructureResolver = (S) =>
                 .child(
                   S.documentList()
                     .title("Featured Projects")
+                    .apiVersion("2023-07-26")
                     .filter('_type == "project" && (featured == true || Featured == true)')
                 ),
               S.listItem()

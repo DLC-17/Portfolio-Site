@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useMemo, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useTheme } from "next-themes";
@@ -420,6 +421,9 @@ function ParticleField() {
 }
 
 export function BackgroundParticles() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin-studio")) return null;
+
   return (
     <div className="fixed inset-0 z-[-1] pointer-events-none">
       <Canvas camera={{ position: [0, 0, 10] }}>

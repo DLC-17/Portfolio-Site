@@ -1,9 +1,6 @@
 import "../app/globals.css"; // Ensure global styles are applied
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import Header from "@/components/sections/Header/Header";
-import Footer from "@/components/sections/Footer/Footer";
-import { ChatWidget } from "@/components/chat/chat-widget";
 import type { Metadata } from "next";
 
 const inter = Inter({
@@ -60,8 +57,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { CommandMenu } from "@/components/ui/command-menu";
-import { BackgroundParticles } from "@/components/ui/background-particles";
 import { SeasonalProvider } from "@/components/ui/seasonal-provider";
 import { ContentShell } from "@/components/ui/content-shell";
 
@@ -86,14 +81,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SeasonalProvider>
-            <BackgroundParticles />
-            <CommandMenu />
-            <ContentShell>
-              <Header />
-              <div className="flex-grow">{children}</div>
-              <Footer />
-              <ChatWidget />
-            </ContentShell>
+            <ContentShell>{children}</ContentShell>
           </SeasonalProvider>
         </ThemeProvider>
       </body>

@@ -1,22 +1,39 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { useSeasonal } from "@/components/ui/seasonal-provider";
 import { EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Header from "@/components/sections/Header/Header";
+import Footer from "@/components/sections/Footer/Footer";
+import { ChatWidget } from "@/components/chat/chat-widget";
+import { CommandMenu } from "@/components/ui/command-menu";
+import { BackgroundParticles } from "@/components/ui/background-particles";
 
 export function ContentShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isStudio = pathname?.startsWith("/admin-studio");
   const { backgroundOnly, setBackgroundOnly } = useSeasonal();
+
+  if (isStudio) {
+    return <main className="min-h-screen">{children}</main>;
+  }
 
   return (
     <>
+      <BackgroundParticles />
+      <CommandMenu />
       <div
         className={cn(
           "flex min-h-svh flex-col transition-opacity duration-500",
           backgroundOnly ? "opacity-0 pointer-events-none select-none" : "opacity-100"
         )}
       >
-        {children}
+        <Header />
+        <div className="flex-grow">{children}</div>
+        <Footer />
+        <ChatWidget />
       </div>
 
       {backgroundOnly && (

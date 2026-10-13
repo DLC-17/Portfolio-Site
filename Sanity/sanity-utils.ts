@@ -26,7 +26,7 @@ export const urlFor = (source: Image | any) => builder.image(source)
 // ✅ Fetch Projects
 export const fetchProjects = async () => {
   return await sanityClient.fetch(
-    groq`*[_type == "project"] | order(publishedAt desc){
+    groq`*[_type == "project"] | order(coalesce(publishedAt, _createdAt) desc){
       _id,
       title,
       slug,
@@ -35,7 +35,8 @@ export const fetchProjects = async () => {
       demoUrl,
       githubUrl,
       mainImage,
-      publishedAt
+      publishedAt,
+      featured
     }`
   )
 }

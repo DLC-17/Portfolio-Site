@@ -29,7 +29,7 @@ import { Code2, Layout, Server, Cpu, MapPin, ExternalLink, FileText, Mail } from
 import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { fetchFeaturedProjects, fetchProjects, fetchResume, DEFAULT_RESUME_FALLBACK_URL, type ResumeData } from "@/sanity/sanity-utils";
+import { fetchProjects, fetchResume, DEFAULT_RESUME_FALLBACK_URL, type ResumeData } from "@/sanity/sanity-utils";
 import type { Image as SanityImage } from "sanity";
 import { ProjectCard, type ProjectCardData } from "@/components/projects/project-card";
 import { ProjectCardSkeleton } from "@/components/projects/project-skeletons";
@@ -130,9 +130,9 @@ const experience: {
     date: "Jan 2026 – June 2026",
     location: "Bay Area, CA",
     description: [
-      "Architected market-ready technical infrastructures for CEOs, transitioning from vision to production-grade deployment in ambiguous startup environments ",
-      "Developed modular, decoupled system frameworks from the ground up to ensure high availability and long-term operational scalability ",
-      "Owned the technical roadmap for early-stage ventures, aligning complex engineering efforts with critical business milestones and product-market fit ",
+      "Architected technical infrastructures CEOs, transitioning from vision deployment in ambiguous startup environments ",
+      "Developed modular, decoupled system frameworks from the ground up to ensure long-term operational scalability ",
+      "Owned the technical roadmap for early-stage ventures, aligning engineering efforts with business milestones",
     ],
   },
   {
@@ -141,13 +141,12 @@ const experience: {
     date: "Sep 2025 – Feb 2026",
     location: "Remote",
     description: [
-      "Engineered LLM orchestration and scraper frameworks to automate mission-critical data acquisition using Python and Playwright ",
+      "Engineered Playwright orchestration layer to automate Voice Agent actions using TypeScript",
       "Developed and optimized scalable automation systems achieving 99.9% operational reliability across volatile, client-facing environments ",
       "Refined prompt logic and implemented dynamic adaptation logic to handle complex edge cases and maintain continuity in real-time processes ",
     ],
   },
-  {
-    title: "Website Developer",
+  {    title: "Website Developer",
     company: "Freelance",
     date: "2025 - Present",
     location: "Bay Area, CA",
@@ -209,16 +208,7 @@ const experience: {
   
 ];
 
-type FeaturedProject = {
-  _id: string;
-  title: string;
-  description: string;
-  technologies?: string[];
-  mainImage?: SanityImage;
-  demoUrl?: string;
-  githubUrl?: string;
-  publishedAt?: string;
-};
+type FeaturedProject = ProjectCardData & { featured?: boolean; Featured?: boolean };
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -269,16 +259,14 @@ export default function Home() {
   useEffect(() => {
     const load = async () => {
       try {
-        const [featuredResult, allResult, resumeResult] = await Promise.allSettled([
-          fetchFeaturedProjects(),
+        const [allResult, resumeResult] = await Promise.allSettled([
           fetchProjects(),
           fetchResume(),
         ]);
-        if (featuredResult.status === "fulfilled") {
-          setFeaturedProjects(featuredResult.value);
-        }
         if (allResult.status === "fulfilled") {
-          setAllProjects(allResult.value);
+          const projects = allResult.value;
+          setAllProjects(projects);
+          setFeaturedProjects(projects.filter((p: any) => p.featured === true || p.Featured === true));
         }
         if (resumeResult.status === "fulfilled" && resumeResult.value) {
           setResume(resumeResult.value);
@@ -554,19 +542,9 @@ export default function Home() {
                 </p>
               ) : (
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:gap-10 lg:grid-cols-3">
-                  {featuredProjects.map((project, index) => {
-                    const data: ProjectCardData = {
-                      _id: project._id,
-                      title: project.title,
-                      description: project.description,
-                      technologies: project.technologies,
-                      mainImage: project.mainImage,
-                      demoUrl: project.demoUrl,
-                      githubUrl: project.githubUrl,
-                      publishedAt: project.publishedAt,
-                    };
-                    return <ProjectCard key={project._id} project={data} index={index} />;
-                  })}
+                  {featuredProjects.map((project, index) => (
+                    <ProjectCard key={project._id} project={project} index={index} />
+                  ))}
                 </div>
               )}
               </motion.div>
@@ -580,19 +558,9 @@ export default function Home() {
                 </p>
               ) : (
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:gap-10 lg:grid-cols-3">
-                  {allProjects.map((project, index) => {
-                    const data: ProjectCardData = {
-                      _id: project._id,
-                      title: project.title,
-                      description: project.description,
-                      technologies: project.technologies,
-                      mainImage: project.mainImage,
-                      demoUrl: project.demoUrl,
-                      githubUrl: project.githubUrl,
-                      publishedAt: project.publishedAt,
-                    };
-                    return <ProjectCard key={project._id} project={data} index={index} />;
-                  })}
+                  {allProjects.map((project, index) => (
+                    <ProjectCard key={project._id} project={project} index={index} />
+                  ))}
                 </div>
               )}
               </motion.div>
