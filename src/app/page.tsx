@@ -53,13 +53,13 @@ const degrees: EducationItem[] = [
   {
     src: "/Logos/SMCpl.png",
     name: "Saint Mary's College of California",
-    degree: "B.S Computer Science",
+    degree: "B.S. Computer Science",
     link: "https://www.stmarys-ca.edu/",
   },
   {
     src: "/Logos/SMCpl.png",
     name: "Saint Mary's College of California",
-    degree: "B.S Data Science",
+    degree: "B.S. Data Science",
     link: "https://www.stmarys-ca.edu/",
   },
 ];
@@ -73,7 +73,7 @@ const certificates: EducationItem[] = [
   },
   {
     src: "/Logos/fcc_primary_small.png",
-    name: "FreeCode Camp",
+    name: "FreeCodeCamp",
     degree: "Responsive Web Design",
     link: "https://freecodecamp.org/certification/DLC/responsive-web-design",
     invertInLight: true,
@@ -130,8 +130,8 @@ const experience: {
     date: "Jan 2026 – June 2026",
     location: "Bay Area, CA",
     description: [
-      "Architected technical infrastructures CEOs, transitioning from vision deployment in ambiguous startup environments ",
-      "Developed modular, decoupled system frameworks from the ground up to ensure long-term operational scalability ",
+      "Architected technical infrastructure collaborating directly with the CEO, transitioning from vision to deployment in an ambiguous startup environment",
+      "Developed modular, decoupled system frameworks from the ground up to ensure long-term operational scalability",
       "Owned the technical roadmap for early-stage ventures, aligning engineering efforts with business milestones",
     ],
   },
@@ -141,14 +141,15 @@ const experience: {
     date: "Sep 2025 – Feb 2026",
     location: "Remote",
     description: [
-      "Engineered Playwright orchestration layer to automate Voice Agent actions using TypeScript",
-      "Developed and optimized scalable automation systems achieving 99.9% operational reliability across volatile, client-facing environments ",
-      "Refined prompt logic and implemented dynamic adaptation logic to handle complex edge cases and maintain continuity in real-time processes ",
+      "Engineered a Playwright orchestration layer to automate Voice Agent actions using TypeScript",
+      "Developed and optimized scalable automation systems achieving 99.9% operational reliability across volatile, client-facing environments",
+      "Refined prompt logic and implemented dynamic adaptation logic to handle complex edge cases and maintain continuity in real-time processes",
     ],
   },
-  {    title: "Website Developer",
+  {
+    title: "Website Developer",
     company: "Freelance",
-    date: "2025 - Present",
+    date: "2025 – Present",
     location: "Bay Area, CA",
     description: [
       "Designed and engineered high-performance custom web applications for Bay Area businesses and creators, emphasizing mobile responsiveness and modern brand identity",
@@ -179,9 +180,9 @@ const experience: {
     date: "Dec 2023 – Jan 2024",
     location: "San Francisco, CA",
     description: [
-      "Served as a critical Human-in-the-Loop (HITL) layer for a proprietary Voice AI agent, maintaining 100% data accuracy during high-volume operational spikes ",
-      "Identified and resolved AI hallucinations and logic drift in real-time to preserve the integrity of sensitive patient insurance data in production ",
-      "Analyzed live AI-to-client interactions to identify failure patterns, providing technical feedback to refine agent decision-making logic ",
+      "Served as a critical Human-in-the-Loop (HITL) layer for a proprietary Voice AI agent, maintaining 100% data accuracy during high-volume operational spikes",
+      "Identified and resolved AI hallucinations and logic drift in real-time to preserve the integrity of sensitive patient insurance data in production",
+      "Analyzed live AI-to-client interactions to identify failure patterns, providing technical feedback to refine agent decision-making logic",
     ],
   },
   {
@@ -480,18 +481,19 @@ export default function Home() {
                           –
                         </span>
                           <span>
- {typeof desc === 'string' ? (
- desc
- ) : (
-<Link
-  href={desc.url}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="text-opposing font-medium underline underline-offset-4 transition-all hover:opacity-80"
->
-  {desc.name}
-</Link>
- )}</span>
+                            {typeof desc === "string" ? (
+                              desc
+                            ) : (
+                              <Link
+                                href={desc.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-opposing font-medium underline underline-offset-4 transition-all hover:opacity-80"
+                              >
+                                {desc.name}
+                              </Link>
+                            )}
+                          </span>
                       </li>
                     ))}
                   </ul>
