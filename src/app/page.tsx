@@ -154,8 +154,8 @@ const experience: {
     description: [
       "Designed and engineered high-performance custom web applications for Bay Area businesses and creators, emphasizing mobile responsiveness and modern brand identity",
       {
-        name: "Marao Ethiopian Coffee (Custom e-commerce storefront & brand platform)",
-        url: "https://www.maraoethiopiancoffee.com",
+        name: "Marao Ethiopian Coffee (Foundational E-commerce Platform — Archive)",
+        url: "",
       },
       {
         name: "Richard Trinh Photography (Portfolio site with optimized asset delivery & galleries)",
